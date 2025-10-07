@@ -1,0 +1,257 @@
+/* Admin Layout Styles - Professional Alignment and Spacing */
+
+/* Container Alignment */
+.admin-container {
+  @apply w-full mx-auto;
+  max-width: 1920px;
+}
+
+/* Consistent Section Spacing */
+.admin-section {
+  @apply mb-8;
+}
+
+/* Card Component Standards */
+.admin-card {
+  @apply bg-slate-900/50 backdrop-blur-sm border border-slate-800/50 rounded-2xl;
+  @apply hover:bg-slate-900/70 hover:border-slate-700/50;
+  @apply transition-all duration-200;
+}
+
+/* Table Responsive Wrapper */
+.admin-table-wrapper {
+  @apply overflow-x-auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Sidebar Fixed Width */
+.admin-sidebar {
+  width: 280px;
+  min-width: 280px;
+  max-width: 280px;
+}
+
+/* Main Content Area with Sidebar Compensation */
+@media (min-width: 1024px) {
+  .admin-main-content {
+    margin-left: 280px;
+    width: calc(100% - 280px);
+  }
+}
+
+/* Header Height Consistency */
+.admin-header {
+  height: 72px;
+  min-height: 72px;
+}
+
+/* Scrollbar Styling for Admin */
+.admin-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.admin-scrollbar::-webkit-scrollbar-track {
+  @apply bg-slate-900/50;
+  border-radius: 4px;
+}
+
+.admin-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-slate-700 hover:bg-slate-600;
+  border-radius: 4px;
+}
+
+/* Grid System Improvements */
+.admin-grid-responsive {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Ensure proper z-index layering */
+.admin-layer-backdrop {
+  z-index: 40;
+}
+
+.admin-layer-sidebar {
+  z-index: 50;
+}
+
+.admin-layer-header {
+  z-index: 30;
+}
+
+.admin-layer-modal {
+  z-index: 60;
+}
+
+.admin-layer-tooltip {
+  z-index: 70;
+}
+
+/* Responsive Padding System */
+.admin-padding-responsive {
+  @apply px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8;
+}
+
+/* Animation Classes */
+.admin-transition-smooth {
+  @apply transition-all duration-200 ease-in-out;
+}
+
+.admin-transition-fast {
+  @apply transition-all duration-150 ease-out;
+}
+
+/* Focus States */
+.admin-focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50;
+}
+
+/* Button Consistency */
+.admin-button-primary {
+  @apply px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600;
+  @apply hover:from-blue-700 hover:to-indigo-700;
+  @apply text-white font-medium rounded-xl;
+  @apply shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40;
+  @apply transition-all duration-200;
+}
+
+.admin-button-secondary {
+  @apply px-4 py-2.5 bg-slate-800/50 hover:bg-slate-800;
+  @apply text-slate-300 hover:text-white;
+  @apply border border-slate-700/50 rounded-xl;
+  @apply transition-all duration-200;
+}
+
+/* Input Field Standards */
+.admin-input {
+  @apply w-full px-4 py-2.5;
+  @apply bg-slate-800/50 border border-slate-700/50 rounded-xl;
+  @apply text-white placeholder-slate-500;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50;
+  @apply focus:bg-slate-800 transition-all duration-200;
+}
+
+/* Responsive Table */
+@media (max-width: 1024px) {
+  .admin-table-mobile {
+    @apply block;
+  }
+
+  .admin-table-mobile thead {
+    @apply hidden;
+  }
+
+  .admin-table-mobile tbody {
+    @apply block;
+  }
+
+  .admin-table-mobile tr {
+    @apply block border-b border-slate-800/50 mb-4 pb-4;
+  }
+
+  .admin-table-mobile td {
+    @apply block text-right;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  .admin-table-mobile td::before {
+    content: attr(data-label);
+    @apply absolute left-4 text-left font-medium text-slate-400;
+  }
+}
+
+/* Flex Layout Utilities */
+.admin-flex-center {
+  @apply flex items-center justify-center;
+}
+
+.admin-flex-between {
+  @apply flex items-center justify-between;
+}
+
+.admin-flex-start {
+  @apply flex items-start;
+}
+
+/* Content Width Constraints */
+.admin-content-narrow {
+  max-width: 1280px;
+  @apply mx-auto;
+}
+
+.admin-content-wide {
+  max-width: 1920px;
+  @apply mx-auto;
+}
+
+/* Responsive Sidebar Behavior */
+@media (max-width: 1024px) {
+  .admin-sidebar-mobile {
+    @apply fixed top-0 left-0 h-full z-50;
+    transform: translateX(-100%);
+    @apply transition-transform duration-300;
+  }
+
+  .admin-sidebar-mobile.open {
+    transform: translateX(0);
+  }
+
+  .admin-main-mobile {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+/* Sticky Header Enhancement */
+.admin-header-sticky {
+  @apply sticky top-0 z-30;
+  backdrop-filter: blur(12px);
+}
+
+/* Card Hover Effects */
+.admin-card-hover {
+  @apply transform transition-all duration-200;
+}
+
+.admin-card-hover:hover {
+  @apply -translate-y-0.5 shadow-xl;
+}
+
+/* Loading States */
+.admin-skeleton {
+  @apply animate-pulse bg-slate-800/50 rounded;
+}
+
+/* Error States */
+.admin-error {
+  @apply border-red-500/50 bg-red-500/10 text-red-400;
+}
+
+/* Success States */
+.admin-success {
+  @apply border-green-500/50 bg-green-500/10 text-green-400;
+}
+
+/* Warning States */
+.admin-warning {
+  @apply border-yellow-500/50 bg-yellow-500/10 text-yellow-400;
+}
+
+/* Print Styles */
+@media print {
+  .admin-no-print {
+    display: none !important;
+  }
+
+  .admin-sidebar {
+    display: none;
+  }
+
+  .admin-main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+}

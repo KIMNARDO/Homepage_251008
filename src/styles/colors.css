@@ -1,0 +1,214 @@
+/* Enhanced Color System for PAPSNET */
+
+:root {
+  /* Primary Brand Colors */
+  --color-primary-navy: #0A0E27;      /* Deep Navy - Main Background */
+  --color-primary-blue: #3B82F6;      /* Electric Blue - Main Accent */
+  --color-primary-blue-dark: #2563EB; /* Darker Blue - Hover States */
+  --color-primary-blue-light: #60A5FA; /* Light Blue - Highlights */
+
+  /* Secondary Colors */
+  --color-emerald: #10B981;           /* Success Green */
+  --color-amber: #F59E0B;              /* Warning Amber */
+  --color-red: #EF4444;                /* Error Red */
+  --color-purple: #8B5CF6;            /* Purple Accent */
+  --color-cyan: #06B6D4;               /* Cyan Accent */
+
+  /* Neutral Colors - Dark Theme */
+  --color-gray-50: #F9FAFB;
+  --color-gray-100: #F3F4F6;
+  --color-gray-200: #E5E7EB;
+  --color-gray-300: #D1D5DB;
+  --color-gray-400: #9CA3AF;
+  --color-gray-500: #6B7280;
+  --color-gray-600: #4B5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1F2937;
+  --color-gray-900: #111827;
+  --color-gray-950: #030712;
+
+  /* Background Colors */
+  --bg-primary: var(--color-primary-navy);
+  --bg-secondary: #0F1329;
+  --bg-tertiary: #141836;
+  --bg-surface: #1A1F42;
+  --bg-surface-hover: #1F2548;
+  --bg-overlay: rgba(10, 14, 39, 0.9);
+
+  /* Text Colors */
+  --text-primary: #FFFFFF;
+  --text-secondary: rgba(255, 255, 255, 0.8);
+  --text-tertiary: rgba(255, 255, 255, 0.6);
+  --text-muted: rgba(255, 255, 255, 0.4);
+  --text-inverse: var(--color-primary-navy);
+
+  /* Border Colors */
+  --border-primary: rgba(255, 255, 255, 0.1);
+  --border-secondary: rgba(255, 255, 255, 0.05);
+  --border-accent: var(--color-primary-blue);
+  --border-hover: rgba(255, 255, 255, 0.2);
+
+  /* Gradient Colors */
+  --gradient-primary: linear-gradient(135deg, var(--color-primary-blue) 0%, var(--color-purple) 100%);
+  --gradient-secondary: linear-gradient(135deg, var(--color-cyan) 0%, var(--color-primary-blue) 100%);
+  --gradient-dark: linear-gradient(180deg, var(--color-primary-navy) 0%, #000000 100%);
+  --gradient-light: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  --gradient-hero: linear-gradient(135deg,
+    rgba(59, 130, 246, 0.2) 0%,
+    rgba(139, 92, 246, 0.1) 50%,
+    rgba(16, 185, 129, 0.1) 100%
+  );
+
+  /* Shadow Colors */
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --shadow-color-light: rgba(59, 130, 246, 0.1);
+  --shadow-sm: 0 1px 3px 0 var(--shadow-color);
+  --shadow-md: 0 4px 6px -1px var(--shadow-color);
+  --shadow-lg: 0 10px 15px -3px var(--shadow-color);
+  --shadow-xl: 0 20px 25px -5px var(--shadow-color);
+  --shadow-2xl: 0 25px 50px -12px var(--shadow-color);
+  --shadow-glow: 0 0 20px var(--shadow-color-light);
+}
+
+/* Component-Specific Colors */
+
+/* Buttons */
+.btn-primary {
+  background: var(--gradient-primary);
+  color: var(--text-primary);
+  border: 1px solid transparent;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--color-primary-blue-dark) 0%, var(--color-purple) 100%);
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-surface);
+  border-color: var(--border-hover);
+}
+
+.btn-success {
+  background: var(--color-emerald);
+  color: var(--text-primary);
+}
+
+.btn-warning {
+  background: var(--color-amber);
+  color: var(--text-inverse);
+}
+
+.btn-danger {
+  background: var(--color-red);
+  color: var(--text-primary);
+}
+
+/* Cards */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-primary);
+}
+
+.card:hover {
+  background: var(--bg-surface-hover);
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Badges */
+.badge-primary {
+  background: var(--color-primary-blue);
+  color: var(--text-primary);
+}
+
+.badge-success {
+  background: var(--color-emerald);
+  color: var(--text-primary);
+}
+
+.badge-warning {
+  background: var(--color-amber);
+  color: var(--text-inverse);
+}
+
+.badge-danger {
+  background: var(--color-red);
+  color: var(--text-primary);
+}
+
+/* Status Indicators */
+.status-active {
+  color: var(--color-emerald);
+}
+
+.status-pending {
+  color: var(--color-amber);
+}
+
+.status-error {
+  color: var(--color-red);
+}
+
+/* Overlays */
+.overlay-dark {
+  background: var(--bg-overlay);
+}
+
+.overlay-gradient {
+  background: var(--gradient-dark);
+}
+
+/* Glass Effect */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Dark Mode Support (Default) */
+.dark {
+  color-scheme: dark;
+}
+
+/* Light Mode Override */
+.light {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F9FAFB;
+  --bg-tertiary: #F3F4F6;
+  --bg-surface: #FFFFFF;
+  --bg-surface-hover: #F9FAFB;
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+
+  --text-primary: var(--color-gray-900);
+  --text-secondary: var(--color-gray-700);
+  --text-tertiary: var(--color-gray-500);
+  --text-muted: var(--color-gray-400);
+  --text-inverse: #FFFFFF;
+
+  --border-primary: var(--color-gray-200);
+  --border-secondary: var(--color-gray-100);
+  --border-accent: var(--color-primary-blue);
+  --border-hover: var(--color-gray-300);
+}
+
+/* Accessibility - High Contrast */
+@media (prefers-contrast: high) {
+  :root {
+    --text-primary: #FFFFFF;
+    --text-secondary: #F3F4F6;
+    --border-primary: #FFFFFF;
+    --color-primary-blue: #60A5FA;
+  }
+}

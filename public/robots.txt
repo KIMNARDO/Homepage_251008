@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.papsnet.net/sitemap.xml
+
+# Important pages
+Allow: /solutions
+Allow: /clip-plm
+Allow: /clip-ddms
+Allow: /clip-epl
+Allow: /case-studies
+Allow: /contact
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1

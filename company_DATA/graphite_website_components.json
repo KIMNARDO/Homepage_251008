@@ -1,0 +1,682 @@
+{
+  "website_analysis": {
+    "url": "https://graphite.dev/",
+    "title": "Graphite - Code review for the age of AI",
+    "analysis_date": "2025-01-21",
+    "viewport": {
+      "width": 685,
+      "height": 975
+    }
+  },
+  "design_system": {
+    "colors": {
+      "primary": {
+        "background": "rgb(0, 0, 0)",
+        "text": "rgb(255, 255, 255)",
+        "border": "oklch(0.922 0 0)"
+      },
+      "theme": "dark",
+      "palette": [
+        "rgb(0, 0, 0)",
+        "rgb(255, 255, 255)",
+        "oklch(0.922 0 0)"
+      ]
+    },
+    "typography": {
+      "primary_font": "__matterFont_624f45, __matterFont_Fallback_624f45, -apple-system, blinkmacsystemfont, \"segoe ui\", roboto, oxygen, ubuntu, cantarell, \"fira sans\", \"droid sans\", \"helvetica neue\", sans-serif, sans-serif",
+      "fallback_font": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "font_sizes": ["10.5px", "12px", "13.2px", "16px", "19.2px"],
+      "font_weights": ["300", "400"],
+      "line_heights": ["normal"]
+    },
+    "spacing": {
+      "padding": ["0px", "6px", "12px", "15px", "16px", "24px", "32px", "56px"],
+      "margin": ["0px", "8px", "16px", "24px", "32px"],
+      "gap": ["normal", "3px", "8px", "16px", "24px", "56px"]
+    },
+    "borders": {
+      "radius": ["0px", "15px"],
+      "style": "0px solid oklch(0.922 0 0)"
+    },
+    "layout": {
+      "display_types": ["flex", "block", "inline"],
+      "flex_directions": ["row", "column"],
+      "justify_content": ["normal", "center"],
+      "align_items": ["normal", "center"],
+      "positions": ["static", "relative", "sticky"]
+    },
+    "animations": {
+      "transitions": ["all", "ease", "duration-500"],
+      "hover_effects": "transition-all hover-focus-child ease duration-500"
+    }
+  },
+  "layout_structure": {
+    "header": {
+      "component_type": "header",
+      "tag": "header",
+      "className": "neon_header_header__qBUn0",
+      "styles": {
+        "display": "block",
+        "position": "sticky",
+        "padding": "12px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)",
+        "zIndex": "999",
+        "height": "72px",
+        "maxWidth": "none"
+      },
+      "children": [
+        {
+          "component_type": "logo",
+          "tag": "a",
+          "className": "neon_header_logoWrapper__DDxA3 cta_link__sqsoU",
+          "href": "/homepage",
+          "styles": {
+            "display": "block",
+            "position": "relative",
+            "width": "116px",
+            "height": "24px",
+            "zIndex": "1000"
+          }
+        },
+        {
+          "component_type": "navigation",
+          "tag": "nav",
+          "items": [
+            {"text": "Features", "href": "/features"},
+            {"text": "Diamond", "href": "https://diamond.graphite.dev"},
+            {"text": "Use cases", "href": "/use-cases"},
+            {"text": "Pricing", "href": "/pricing"},
+            {"text": "Docs", "href": "/docs"},
+            {"text": "Blog", "href": "/blog"},
+            {"text": "Contact", "href": "/contact-us"}
+          ],
+          "styles": {
+            "fontSize": "16px",
+            "fontWeight": "400",
+            "color": "rgb(255, 255, 255)"
+          }
+        },
+        {
+          "component_type": "cta_buttons",
+          "children": [
+            {
+              "tag": "a",
+              "className": "cta_button__hG6tY",
+              "text": "Log in",
+              "href": "https://app.graphite.dev/",
+              "styles": {
+                "display": "flex",
+                "alignItems": "center",
+                "gap": "8px",
+                "padding": "6px 15px",
+                "backgroundColor": "rgba(0, 0, 0, 0)",
+                "color": "rgb(252, 252, 252)",
+                "fontSize": "12px",
+                "borderRadius": "15px"
+              }
+            },
+            {
+              "tag": "a",
+              "className": "cta_button__hG6tY",
+              "text": "Sign up",
+              "href": "https://app.graphite.dev/signup",
+              "styles": {
+                "display": "flex",
+                "alignItems": "center",
+                "gap": "8px",
+                "padding": "6px 15px",
+                "backgroundColor": "rgb(0, 0, 0)",
+                "color": "rgb(252, 252, 252)",
+                "fontSize": "12px",
+                "borderRadius": "15px"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "main": {
+      "component_type": "main_content",
+      "tag": "main",
+      "sections": [
+        {
+          "component_type": "hero_section",
+          "tag": "section",
+          "className": "HomepageSection_homepageSection__QWJDG VideoHero_container__mF12X themedSection",
+          "styles": {
+            "display": "flex",
+            "flexDirection": "column",
+            "padding": "32px 0px",
+            "backgroundColor": "rgb(0, 0, 0)",
+            "color": "rgb(255, 255, 255)",
+            "height": "975.71px"
+          },
+          "content": {
+            "announcement_banner": {
+              "text": "Try Graphite Chat now!",
+              "href": "/blog/introducing-graphite-chat",
+              "component_type": "announcement"
+            },
+            "heading": {
+              "tag": "h1",
+              "text": "Code review for the age of AI",
+              "styles": {
+                "fontSize": "large",
+                "fontWeight": "bold"
+              }
+            },
+            "subheading": {
+              "text": "Graphite helps teams on GitHub ship higher quality software, faster"
+            },
+            "cta_buttons": [
+              {
+                "text": "Get started for free",
+                "href": "https://app.graphite.dev/signup",
+                "className": "cta_button__hG6tY",
+                "primary": true
+              },
+              {
+                "text": "Request a demo",
+                "href": "/contact-us",
+                "className": "cta_button__hG6tY",
+                "primary": false
+              }
+            ],
+            "company_logos": {
+              "component_type": "logo_carousel",
+              "items": ["neon-logo", "neon-logo", "neon-logo", "neon-logo"]
+            },
+            "video_section": {
+              "component_type": "video_player",
+              "thumbnail": "Thumbnail for Graphite features video",
+              "title": "Graphite features"
+            },
+            "feature_grid": {
+              "component_type": "feature_tabs",
+              "items": [
+                {"icon": "image", "text": "Stacked PRs"},
+                {"icon": "image", "text": "PR page"},
+                {"icon": "image", "text": "AI code review"},
+                {"icon": "image", "text": "Chat"},
+                {"icon": "image", "text": "Merge queue"},
+                {"icon": "image", "text": "PR inbox"},
+                {"icon": "image", "text": "Dev metrics"}
+              ]
+            }
+          }
+        },
+        {
+          "component_type": "social_proof_section",
+          "content": {
+            "heading": "Trusted by 0,000+ developers at top engineering orgs",
+            "company_logos": ["Clear Street", "X", "The Browser Company"],
+            "cta_link": {
+              "text": "Meet our customers",
+              "href": "/customers"
+            },
+            "testimonials_carousel": {
+              "component_type": "carousel",
+              "items": [
+                {
+                  "company": "Shopify",
+                  "title": "How Shopify scaled their developer productivity with stacking",
+                  "href": "/customer/shopify"
+                },
+                {
+                  "company": "Ramp",
+                  "title": "See how Ramp ships code 3x faster with Graphite",
+                  "href": "/customer/ramp"
+                },
+                {
+                  "company": "Asana",
+                  "title": "Stacking PRs with Graphite helped engineers at Asana save 7 hours per week",
+                  "href": "/customer/asana"
+                },
+                {
+                  "company": "Tecton",
+                  "title": "How Graphite became the code review tool of choice for engineers at Tecton",
+                  "href": "/customer/tecton"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "component_type": "ai_features_section",
+          "content": {
+            "features": [
+              {
+                "title": "Ask, update, commit. All in one place.",
+                "description": "Now you can chat with Graphite to get context on code changes, fix issues, resolve CI failures, and update your PRs, right in your review flow.",
+                "cta": {
+                  "text": "Learn More",
+                  "href": "https://diamond.graphite.dev"
+                }
+              },
+              {
+                "title": "Save hours on every pull request",
+                "description": "Get immediate, actionable feedback on every pull request with Graphite's codebase-aware AI.",
+                "cta": {
+                  "text": "Learn More",
+                  "href": "https://diamond.graphite.dev"
+                }
+              },
+              {
+                "title": "Turn comments into suggested changes",
+                "description": "Graphite generates suggested code changes for comments, helping you to resolve threads faster.",
+                "cta": {
+                  "text": "Learn More",
+                  "href": "https://diamond.graphite.dev"
+                }
+              },
+              {
+                "title": "Detailed PR descriptions in seconds",
+                "description": "Explain every change to your reviewers with one click.",
+                "cta": {
+                  "text": "Learn More",
+                  "href": "https://diamond.graphite.dev"
+                }
+              },
+              {
+                "title": "From failures to fixes",
+                "description": "Graphite summarizes and generates fixes for your failing CI.",
+                "cta": {
+                  "text": "Learn More",
+                  "href": "https://diamond.graphite.dev"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "component_type": "features_section",
+          "tag": "section",
+          "className": "HomepageSection_homepageSection__QWJDG Features_featuresSection__URgq6 themedSection",
+          "styles": {
+            "display": "flex",
+            "flexDirection": "column",
+            "gap": "56px",
+            "padding": "32px 0px",
+            "backgroundColor": "rgb(0, 0, 0)",
+            "color": "rgb(255, 255, 255)",
+            "height": "2549.63px"
+          },
+          "content": {
+            "section_header": {
+              "heading": "Everything you need to ship faster",
+              "subheading": "One end-to-end tool to simplify and accelerate your workflow"
+            },
+            "features": [
+              {
+                "title": "Stay unblocked with stacked PRs",
+                "description": "Stacking allows you to build upon open PRs without waiting for them to merge. Graphite's CLI and VS Code extension enable users to effortlessly create stacks, among many other powerful Git features.",
+                "images": [
+                  {
+                    "src": "https://graphite.dev/nextImageExportOptimizer/gti.f6761078-opt-1200.WEBP",
+                    "alt": "Graphite VS Code extension"
+                  },
+                  {
+                    "src": "https://graphite.dev/nextImageExportOptimizer/cli.ef8966ea-opt-1080.WEBP",
+                    "alt": "Graphite CLI"
+                  }
+                ],
+                "cta_buttons": [
+                  {
+                    "text": "Start stacking",
+                    "href": "https://app.graphite.dev/signup",
+                    "primary": true
+                  },
+                  {
+                    "text": "Read more about our CLI",
+                    "href": "/features#cli",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "title": "A review experience built for teams",
+                "description": "One unified inbox and review workflow for your team's PRs.",
+                "images": [
+                  {
+                    "src": "https://graphite.dev/nextImageExportOptimizer/pr_inbox.c1b1a44c-opt-640.WEBP",
+                    "alt": "Graphite PR inbox"
+                  }
+                ],
+                "cta_buttons": [
+                  {
+                    "text": "Learn more",
+                    "href": "/features#inbox",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "title": "Don't miss a beat",
+                "description": "Actionable Slack notifications that meet you where you are.",
+                "cta_buttons": [
+                  {
+                    "text": "Read the docs",
+                    "href": "https://graphite.dev/docs/slack-notifications",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "title": "Smarter CI",
+                "description": "Stacking-integrated CI that only runs when you need it.",
+                "cta_buttons": [
+                  {
+                    "text": "Read about CI Optimizations",
+                    "href": "https://graphite.dev/docs/stacking-and-ci",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "title": "Your unified developer platform",
+                "description": "Supercharge your team with reviewer assignment, merge queues, automations, and insights.",
+                "feature_icons": [
+                  "Insights", "Protections", "Merge Queue", 
+                  "Reviewer Assignment", "Automations"
+                ],
+                "cta_buttons": [
+                  {
+                    "text": "Read about merge queues",
+                    "href": "/features#merge-queue",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "title": "Chat is fully embedded in your PR page",
+                "description": "Now you can chat with Graphite to understand your PRs, get instant feedback, and make updates, right where you're reviewing.",
+                "cta_buttons": [
+                  {
+                    "text": "Start chatting",
+                    "href": "https://app.graphite.dev/signup",
+                    "primary": true
+                  }
+                ]
+              }
+            ],
+            "section_footer": {
+              "cta_link": {
+                "text": "Read more about all our features",
+                "href": "/features"
+              }
+            }
+          }
+        },
+        {
+          "component_type": "integration_section",
+          "tag": "section", 
+          "className": "HomepageSection_homepageSection__QWJDG Integration_integrationSection__IHOIk themedSection",
+          "styles": {
+            "display": "flex",
+            "flexDirection": "column",
+            "padding": "32px 0px",
+            "backgroundColor": "rgb(0, 0, 0)",
+            "color": "rgb(255, 255, 255)",
+            "height": "711.02px"
+          },
+          "content": {
+            "heading": "Developer infrastructure built for your team",
+            "subheading": "Graphite works seamlessly with the technologies you already use",
+            "integration_logos": {
+              "component_type": "logo_grid",
+              "items": ["GitHub", "Git", "VS Code", "Slack", "CI Tools"]
+            },
+            "benefits": [
+              {
+                "title": "Where change happens",
+                "description": "Organizations that adopt Graphite ship more code with smaller PRs and faster review cycles."
+              },
+              {
+                "title": "Synced with GitHub", 
+                "description": "GitHub sync and deep integration means your team is always on the same page."
+              },
+              {
+                "title": "Built on top of Git",
+                "description": "Graphite is integrated with all your git scripts, aliases, and workflows."
+              }
+            ]
+          }
+        },
+        {
+          "component_type": "cta_section",
+          "tag": "section",
+          "className": "HomepageSection_homepageSection__QWJDG PreFooter_section__hepe4 themedSection",
+          "styles": {
+            "display": "flex",
+            "position": "relative",
+            "flexDirection": "column",
+            "padding": "24px 0px",
+            "backgroundColor": "rgb(0, 0, 0)",
+            "color": "rgb(255, 255, 255)",
+            "height": "256.20px"
+          },
+          "content": {
+            "heading": "Built for the world's fastest engineering teams, now available for everyone",
+            "cta_buttons": [
+              {
+                "text": "Request a demo",
+                "href": "/contact-us",
+                "primary": false
+              },
+              {
+                "text": "Start free trial",
+                "href": "https://app.graphite.dev/signup",
+                "primary": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "footer": {
+      "component_type": "footer",
+      "tag": "footer",
+      "children": [
+        {
+          "component_type": "footer_logo",
+          "tag": "img"
+        },
+        {
+          "component_type": "footer_navigation",
+          "sections": [
+            {
+              "title": "Features",
+              "links": [
+                {"text": "CLI", "href": "/features#cli"},
+                {"text": "Merge queue", "href": "/features#merge-queue"},
+                {"text": "Insights", "href": "/features#insights"},
+                {"text": "PR inbox", "href": "/features#inbox"},
+                {"text": "AI reviews", "href": "https://diamond.graphite.dev"},
+                {"text": "Chat", "href": "/blog/introducing-graphite-chat", "badge": "New"}
+              ]
+            },
+            {
+              "title": "Company",
+              "links": [
+                {"text": "Blog", "href": "/blog"},
+                {"text": "Customers", "href": "/customers"},
+                {"text": "Careers", "href": "/careers", "badge": "18"},
+                {"text": "Privacy policy", "href": "/privacy"},
+                {"text": "Terms of service", "href": "/terms-of-service"}
+              ]
+            },
+            {
+              "title": "Resources",
+              "links": [
+                {"text": "Docs", "href": "/docs"},
+                {"text": "Pricing", "href": "/pricing"},
+                {"text": "Status", "href": "https://status.graphite.dev"},
+                {"text": "Guides", "href": "/guides"},
+                {"text": "Stacking workflow", "href": "/stacking"}
+              ]
+            },
+            {
+              "title": "Connect",
+              "links": [
+                {"text": "Contact us", "href": "/contact-us"},
+                {"text": "Community Slack", "href": "https://community.graphite.dev"},
+                {"text": "GitHub", "href": "https://github.com/withgraphite/"},
+                {"text": "X (Twitter)", "href": "https://twitter.com/withgraphite/"},
+                {"text": "LinkedIn", "href": "https://www.linkedin.com/company/withgraphite/"},
+                {"text": "YouTube", "href": "https://www.youtube.com/@withgraphite"}
+              ]
+            }
+          ]
+        },
+        {
+          "component_type": "footer_bottom",
+          "content": {
+            "status_link": {
+              "text": "All systems operational",
+              "href": "https://status.graphite.dev"
+            },
+            "copyright": "© Graphite 2025",
+            "logo_images": [
+              "An image of the Graphite logo as a neon sign",
+              "Graphite wordmark"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "component_library": {
+    "buttons": {
+      "primary_button": {
+        "className": "cta_button__hG6tY",
+        "styles": {
+          "display": "flex",
+          "alignItems": "center",
+          "gap": "8px",
+          "padding": "6px 15px",
+          "backgroundColor": "rgb(0, 0, 0)",
+          "color": "rgb(252, 252, 252)",
+          "fontSize": "12px",
+          "borderRadius": "15px",
+          "transition": "all ease duration-500"
+        }
+      },
+      "secondary_button": {
+        "className": "cta_button__hG6tY cta_button--fade__EiVBp",
+        "styles": {
+          "display": "flex",
+          "alignItems": "center",
+          "gap": "8px",
+          "padding": "6px 15px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(252, 252, 252)",
+          "fontSize": "12px",
+          "borderRadius": "15px"
+        }
+      }
+    },
+    "links": {
+      "navigation_link": {
+        "className": "cta_link__sqsoU",
+        "styles": {
+          "color": "rgb(255, 255, 255)",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "textDecoration": "none",
+          "transition": "all ease duration-500"
+        }
+      },
+      "footer_link": {
+        "className": "flex items-center gap-1 [&>svg]:size-3 sm:[&>svg]:size-4 [&>svg]:mr-0.5 sm:[&>svg]:mr-1 transition-all hover-focus-child ease duration-500 text-neutral-400",
+        "styles": {
+          "display": "flex",
+          "alignItems": "center",
+          "gap": "3px",
+          "color": "oklch(0.708 0 0)",
+          "fontSize": "10.5px",
+          "transition": "all ease duration-500"
+        }
+      }
+    },
+    "sections": {
+      "homepage_section": {
+        "className": "HomepageSection_homepageSection__QWJDG themedSection",
+        "styles": {
+          "display": "flex",
+          "flexDirection": "column",
+          "padding": "32px 0px",
+          "backgroundColor": "rgb(0, 0, 0)",
+          "color": "rgb(255, 255, 255)"
+        }
+      }
+    },
+    "containers": {
+      "container": {
+        "className": "container_container__18uat",
+        "styles": {
+          "maxWidth": "var(--container)",
+          "margin": "auto",
+          "position": "relative",
+          "padding": "0 var(--container-sides-px)"
+        }
+      },
+      "wide_container": {
+        "className": "container_containerWide__0jJ2O",
+        "styles": {
+          "maxWidth": "var(--container-wide)",
+          "margin": "auto",
+          "position": "relative",
+          "padding": "0 var(--container-sides-px)"
+        }
+      }
+    }
+  },
+  "responsive_design": {
+    "breakpoints": {
+      "mobile": "< 640px",
+      "tablet": "640px - 1024px", 
+      "desktop": "> 1024px"
+    },
+    "mobile_adaptations": {
+      "navigation": "hamburger_menu",
+      "font_sizes": "reduced",
+      "padding": "compressed",
+      "grid_layouts": "stacked"
+    }
+  },
+  "technical_implementation": {
+    "framework": "Next.js (based on CSS class patterns)",
+    "styling": "CSS Modules + Tailwind CSS",
+    "fonts": {
+      "primary": "Matter Font (custom)",
+      "monospace": "JetBrains Mono",
+      "fallback": "Inter"
+    },
+    "build_optimization": {
+      "images": "NextImageExportOptimizer",
+      "formats": ["WEBP", "optimized sizes"]
+    },
+    "css_architecture": {
+      "methodology": "CSS Modules with BEM-like naming",
+      "css_variables": "Custom properties for theming",
+      "responsive": "Mobile-first approach"
+    }
+  },
+  "interaction_patterns": {
+    "hover_effects": "subtle opacity and transform changes",
+    "click_effects": "immediate visual feedback",
+    "loading_states": "skeleton screens and progressive loading",
+    "animations": {
+      "duration": "500ms",
+      "easing": "ease",
+      "properties": ["opacity", "transform", "color"]
+    }
+  },
+  "accessibility_features": {
+    "semantic_html": "proper heading hierarchy, landmarks",
+    "keyboard_navigation": "focus indicators and tab order",
+    "screen_reader": "alt texts, aria labels",
+    "color_contrast": "high contrast for readability"
+  }
+}

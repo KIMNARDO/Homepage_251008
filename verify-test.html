@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>TEST 검증 페이지</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #1a1a1a; color: white; }
+        .status { padding: 15px; margin: 10px 0; border-radius: 8px; }
+        .success { background: #10b981; }
+        .error { background: #ef4444; }
+        .info { background: #3b82f6; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; border-radius: 5px; border: none; background: #6366f1; color: white; font-size: 16px; }
+        button:hover { background: #4f46e5; }
+        pre { background: #2a2a2a; padding: 15px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>PAPSNET Homepage TEST 검증</h1>
+
+    <div id="results"></div>
+
+    <button onclick="checkBackend()">1. 백엔드 확인</button>
+    <button onclick="checkFrontend()">2. 프론트엔드 확인</button>
+    <button onclick="updateToTest()">3. TEST로 업데이트</button>
+    <button onclick="verifyHomepage()">4. 홈페이지 검증</button>
+
+    <script>
+        const results = document.getElementById('results');
+
+        async function checkBackend() {
+            try {
+                const response = await fetch('http://localhost:3001/api/public/content');
+                const data = await response.json();
+                const heroTitle = data.data?.find(item => item.contentKey === 'hero.title');
+
+                if (heroTitle) {
+                    const hasTest = heroTitle.contentValue.includes('TEST');
+                    results.innerHTML += `
+                        <div class="status ${hasTest ? 'success' : 'info'}">
+                            백엔드 상태: ${heroTitle.contentValue}<br>
+                            TEST 포함: ${hasTest ? '✅ YES' : '❌ NO'}
+                        </div>`;
+                } else {
+                    results.innerHTML += '<div class="status error">백엔드에서 hero.title을 찾을 수 없음</div>';
+                }
+            } catch (error) {
+                results.innerHTML += '<div class="status error">백엔드 연결 실패: ' + error + '</div>';
+            }
+        }
+
+        async function checkFrontend() {
+            try {
+                const response = await fetch('http://localhost:5176');
+                const html = await response.text();
+                const hasTest = html.includes('TEST');
+
+                // Extract h1 content
+                const h1Match = html.match(/<h1[^>]*>([^<]+)<\/h1>/);
+                const h1Content = h1Match ? h1Match[1] : 'H1 태그를 찾을 수 없음';
+
+                results.innerHTML += `
+                    <div class="status ${hasTest ? 'success' : 'error'}">
+                        프론트엔드 H1: ${h1Content}<br>
+                        TEST 포함: ${hasTest ? '✅ YES' : '❌ NO'}
+                    </div>`;
+            } catch (error) {
+                results.innerHTML += '<div class="status error">프론트엔드 연결 실패: ' + error + '</div>';
+            }
+        }
+
+        async function updateToTest() {
+            try {
+                const timestamp = new Date().toLocaleTimeString('ko-KR');
+                const response = await fetch('http://localhost:3001/api/admin/page-content/1', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contentKey: 'hero.title',
+                        contentValue: 'TEST - 검증 완료 ' + timestamp,
+                        isActive: true
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    results.innerHTML += '<div class="status success">✅ TEST 콘텐츠 업데이트 성공: ' + data.data.contentValue + '</div>';
+                } else {
+                    results.innerHTML += '<div class="status error">❌ 업데이트 실패</div>';
+                }
+            } catch (error) {
+                results.innerHTML += '<div class="status error">업데이트 오류: ' + error + '</div>';
+            }
+        }
+
+        async function verifyHomepage() {
+            results.innerHTML += '<div class="status info">홈페이지 새로고침 후 확인 중...</div>';
+
+            // Check backend first
+            const backendResponse = await fetch('http://localhost:3001/api/public/content');
+            const backendData = await backendResponse.json();
+            const heroTitle = backendData.data?.find(item => item.contentKey === 'hero.title');
+
+            // Check frontend
+            const frontendResponse = await fetch('http://localhost:5176');
+            const html = await frontendResponse.text();
+            const hasTest = html.includes('TEST');
+
+            results.innerHTML += `
+                <div class="status ${hasTest ? 'success' : 'error'}">
+                    <h3>최종 검증 결과</h3>
+                    백엔드 값: ${heroTitle?.contentValue || 'N/A'}<br>
+                    프론트엔드 TEST 표시: ${hasTest ? '✅ 성공' : '❌ 실패'}<br>
+                    <br>
+                    ${hasTest ?
+                        '✅ 관리자 콘텐츠가 홈페이지에 정상 반영됨!' :
+                        '❌ 동기화 실패 - 페이지 새로고침(F5) 필요'}
+                </div>`;
+        }
+
+        // Auto-check on load
+        window.onload = () => {
+            results.innerHTML = '<div class="status info">자동 검증 시작...</div>';
+            checkBackend();
+        };
+    </script>
+</body>
+</html>

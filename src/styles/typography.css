@@ -1,0 +1,277 @@
+/* Typography System for PAPSNET - Korean/English Support */
+
+/* Pretendard Font Import */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+
+/* Noto Sans KR Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap');
+
+/* Inter Font Import for English */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+
+/* Typography CSS Variables */
+:root {
+  /* Font Families */
+  --font-primary-ko: 'Pretendard', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --font-primary-en: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --font-display: 'Pretendard', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Font Sizes - Consistent Scale */
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-3xl: 2rem;       /* 32px */
+  --text-4xl: 3rem;       /* 48px */
+  --text-5xl: 4rem;       /* 64px */
+
+  /* Line Heights */
+  --leading-tight: 1.2;    /* Headings */
+  --leading-normal: 1.5;   /* Body text */
+  --leading-relaxed: 1.7;  /* Readable text */
+
+  /* Font Weights */
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-black: 900;
+
+  /* Letter Spacing */
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+}
+
+/* Base Typography Classes */
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+}
+
+body {
+  font-family: var(--font-primary-ko);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-normal);
+  color: var(--color-text-primary);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, var(--text-5xl));
+  font-weight: var(--font-black);
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, var(--text-4xl));
+  font-weight: var(--font-bold);
+}
+
+h3 {
+  font-size: clamp(1.5rem, 3vw, var(--text-3xl));
+  font-weight: var(--font-semibold);
+}
+
+h4 {
+  font-size: clamp(1.25rem, 2.5vw, var(--text-2xl));
+  font-weight: var(--font-semibold);
+}
+
+h5 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-medium);
+}
+
+h6 {
+  font-size: var(--text-lg);
+  font-weight: var(--font-medium);
+}
+
+/* Body Text */
+p {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  margin: 0 0 1rem;
+}
+
+.text-lead {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  font-weight: var(--font-normal);
+}
+
+.text-small {
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+.text-tiny {
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+}
+
+/* Text Utilities */
+.text-display {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: var(--font-black);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.text-hero {
+  font-size: clamp(2.5rem, 6vw, var(--text-5xl));
+  font-weight: var(--font-black);
+  line-height: 1.1;
+  letter-spacing: var(--tracking-tight);
+}
+
+.text-subtitle {
+  font-size: var(--text-xl);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-relaxed);
+  opacity: 0.9;
+}
+
+/* Korean-specific Typography */
+.text-ko {
+  font-family: var(--font-primary-ko);
+  letter-spacing: -0.01em;
+  word-break: keep-all;
+  line-break: strict;
+}
+
+/* English-specific Typography */
+.text-en {
+  font-family: var(--font-primary-en);
+  letter-spacing: var(--tracking-normal);
+}
+
+/* Mixed Korean-English Typography */
+.text-mixed {
+  font-family: var(--font-display);
+  word-break: keep-all;
+}
+
+/* Weight Utilities */
+.font-light { font-weight: var(--font-light); }
+.font-normal { font-weight: var(--font-normal); }
+.font-medium { font-weight: var(--font-medium); }
+.font-semibold { font-weight: var(--font-semibold); }
+.font-bold { font-weight: var(--font-bold); }
+.font-black { font-weight: var(--font-black); }
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  :root {
+    --text-base: 0.9375rem;  /* 15px on mobile */
+  }
+
+  h1 { font-size: clamp(2rem, 8vw, 3rem); }
+  h2 { font-size: clamp(1.5rem, 6vw, 2.5rem); }
+  h3 { font-size: clamp(1.25rem, 5vw, 2rem); }
+}
+
+/* Print Typography */
+@media print {
+  body {
+    font-family: 'Noto Sans KR', serif;
+    font-size: 11pt;
+    line-height: 1.6;
+  }
+
+  h1 { font-size: 24pt; }
+  h2 { font-size: 18pt; }
+  h3 { font-size: 14pt; }
+}
+
+/* Accessibility - High Contrast Mode */
+@media (prefers-contrast: high) {
+  body {
+    letter-spacing: 0.02em;
+    font-weight: 500;
+  }
+}
+
+/* List Typography */
+ul, ol {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+/* Link Typography */
+a {
+  font-weight: var(--font-medium);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+/* Code Typography */
+code, pre {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.875em;
+}
+
+/* Quotes */
+blockquote {
+  font-size: var(--text-lg);
+  font-style: italic;
+  line-height: var(--leading-relaxed);
+  padding-left: 1.5rem;
+  border-left: 4px solid var(--color-accent);
+}
+
+/* Table Typography */
+table {
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+th {
+  font-weight: var(--font-semibold);
+  text-align: left;
+}
+
+/* Form Typography */
+label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+}
+
+/* Button Typography */
+button {
+  font-family: inherit;
+  font-weight: var(--font-medium);
+  letter-spacing: var(--tracking-wide);
+}
