@@ -128,6 +128,38 @@ const AllSectionsEditorV2: React.FC = () => {
     setSections(sections.map(s => s.id === newSection.id ? newSection : s));
   };
 
+  const updateArrayItem = (arrayPath: string, index: number, itemPath: string, value: any) => {
+    if (!currentSection) return;
+
+    const array = arrayPath.split('.').reduce((obj, key) => obj?.[key], currentSection.content);
+    if (!Array.isArray(array)) return;
+
+    const newArray = [...array];
+    const keys = itemPath.split('.');
+    let target: any = newArray[index];
+
+    for (let i = 0; i < keys.length - 1; i++) {
+      if (!target[keys[i]]) {
+        target[keys[i]] = {};
+      }
+      target = target[keys[i]];
+    }
+    target[keys[keys.length - 1]] = value;
+
+    updateField(arrayPath, newArray);
+  };
+
+  const addArrayItem = (arrayPath: string, defaultItem: any) => {
+    const array = arrayPath.split('.').reduce((obj, key) => obj?.[key], currentSection?.content) || [];
+    updateField(arrayPath, [...array, defaultItem]);
+  };
+
+  const removeArrayItem = (arrayPath: string, index: number) => {
+    const array = arrayPath.split('.').reduce((obj, key) => obj?.[key], currentSection?.content);
+    if (!Array.isArray(array)) return;
+    updateField(arrayPath, array.filter((_, i) => i !== index));
+  };
+
   const moveSection = (id: string, direction: 'up' | 'down') => {
     const index = sections.findIndex(s => s.id === id);
     if (index === -1) return;
@@ -150,6 +182,7 @@ const AllSectionsEditorV2: React.FC = () => {
     setTimeout(() => setMessage(null), 3000);
   };
 
+  // === Hero Section Editor ===
   const renderHeroEditor = () => (
     <div className="space-y-4">
       <EditorField
@@ -176,7 +209,6 @@ const AllSectionsEditorV2: React.FC = () => {
         onChange={(v) => updateField('content.ctaLink', v)}
       />
 
-      {/* 배경 이미지/영상 */}
       <IntegratedMediaManager
         currentMedia={currentSection?.content?.backgroundMedia || ''}
         onMediaSelected={(url) => updateField('content.backgroundMedia', url)}
@@ -185,6 +217,540 @@ const AllSectionsEditorV2: React.FC = () => {
     </div>
   );
 
+  // === Stats Section Editor ===
+  const renderStatsEditor = () => {
+    const stats = currentSection?.content?.stats || [];
+
+    return (
+      <div className="space-y-4">
+        <EditorField
+          label="섹션 제목"
+          value={currentSection?.content?.title || ''}
+          onChange={(v) => updateField('content.title', v)}
+          placeholder="예: 숫자로 보는 PAPSNET"
+        />
+
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-medium text-gray-300">통계 항목</label>
+            <button
+              onClick={() => addArrayItem('content.stats', { value: '0', label: '새 항목', suffix: '+' })}
+              className="flex items-center gap-2 px-3 py-1 bg-electric-600 rounded-lg text-sm hover:bg-electric-700"
+            >
+              <Plus className="w-4 h-4" />
+              항목 추가
+            </button>
+          </div>
+
+          {stats.map((stat: any, index: number) => (
+            <div key={index} className="p-4 bg-slate-900 rounded-lg border border-slate-600 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-400">항목 #{index + 1}</span>
+                <button
+                  onClick={() => removeArrayItem('content.stats', index)}
+                  className="p-1 hover:bg-red-500/20 rounded text-red-400"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2">
+                <input
+                  type="text"
+                  value={stat.value || ''}
+                  onChange={(e) => updateArrayItem('content.stats', index, 'value', e.target.value)}
+                  placeholder="숫자"
+                  className="px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white"
+                />
+                <input
+                  type="text"
+                  value={stat.suffix || ''}
+                  onChange={(e) => updateArrayItem('content.stats', index, 'suffix', e.target.value)}
+                  placeholder="단위 (+, 개, 명 등)"
+                  className="px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white"
+                />
+                <input
+                  type="text"
+                  value={stat.label || ''}
+                  onChange={(e) => updateArrayItem('content.stats', index, 'label', e.target.value)}
+                  placeholder="설명"
+                  className="px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // === Social Proof Section Editor ===
+  const renderSocialProofEditor = () => {
+    const testimonials = currentSection?.content?.testimonials || [];
+
+    return (
+      <div className="space-y-4">
+        <EditorField
+          label="섹션 제목"
+          value={currentSection?.content?.title || ''}
+          onChange={(v) => updateField('content.title', v)}
+          placeholder="예: 고객사 후기"
+        />
+
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-medium text-gray-300">후기 목록</label>
+            <button
+              onClick={() => addArrayItem('content.testimonials', {
+                name: '',
+                company: '',
+                role: '',
+                content: '',
+                rating: 5,
+                avatar: ''
+              })}
+              className="flex items-center gap-2 px-3 py-1 bg-electric-600 rounded-lg text-sm hover:bg-electric-700"
+            >
+              <Plus className="w-4 h-4" />
+              후기 추가
+            </button>
+          </div>
+
+          {testimonials.map((testimonial: any, index: number) => (
+            <div key={index} className="p-4 bg-slate-900 rounded-lg border border-slate-600 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-400">후기 #{index + 1}</span>
+                <button
+                  onClick={() => removeArrayItem('content.testimonials', index)}
+                  className="p-1 hover:bg-red-500/20 rounded text-red-400"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <input
+                  type="text"
+                  value={testimonial.name || ''}
+                  onChange={(e) => updateArrayItem('content.testimonials', index, 'name', e.target.value)}
+                  placeholder="이름"
+                  className="px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white"
+                />
+                <input
+                  type="text"
+                  value={testimonial.company || ''}
+                  onChange={(e) => updateArrayItem('content.testimonials', index, 'company', e.target.value)}
+                  placeholder="회사명"
+                  className="px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white"
+                />
+              </div>
+
+              <input
+                type="text"
+                value={testimonial.role || ''}
+                onChange={(e) => updateArrayItem('content.testimonials', index, 'role', e.target.value)}
+                placeholder="직책"
+                className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white"
+              />
+
+              <textarea
+                value={testimonial.content || ''}
+                onChange={(e) => updateArrayItem('content.testimonials', index, 'content', e.target.value)}
+                placeholder="후기 내용"
+                rows={3}
+                className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white resize-none"
+              />
+
+              <div className="flex items-center gap-2">
+                <label className="text-sm text-gray-400">평점:</label>
+                <select
+                  value={testimonial.rating || 5}
+                  onChange={(e) => updateArrayItem('content.testimonials', index, 'rating', Number(e.target.value))}
+                  className="px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white"
+                >
+                  {[1, 2, 3, 4, 5].map(num => (
+                    <option key={num} value={num}>{'⭐'.repeat(num)}</option>
+                  ))}
+                </select>
+              </div>
+
+              <IntegratedMediaManager
+                currentMedia={testimonial.avatar || ''}
+                onMediaSelected={(url) => updateArrayItem('content.testimonials', index, 'avatar', url)}
+                label="프로필 이미지"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // === Products Section Editor ===
+  const renderProductsEditor = () => {
+    const products = currentSection?.content?.products || [];
+
+    return (
+      <div className="space-y-4">
+        <EditorField
+          label="섹션 제목"
+          value={currentSection?.content?.title || ''}
+          onChange={(v) => updateField('content.title', v)}
+          placeholder="예: 제품 라인업"
+        />
+        <EditorField
+          label="섹션 설명"
+          value={currentSection?.content?.description || ''}
+          onChange={(v) => updateField('content.description', v)}
+          textarea
+          rows={2}
+        />
+
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-medium text-gray-300">제품 목록</label>
+            <button
+              onClick={() => addArrayItem('content.products', {
+                title: '',
+                description: '',
+                features: [],
+                image: '',
+                link: ''
+              })}
+              className="flex items-center gap-2 px-3 py-1 bg-electric-600 rounded-lg text-sm hover:bg-electric-700"
+            >
+              <Plus className="w-4 h-4" />
+              제품 추가
+            </button>
+          </div>
+
+          {products.map((product: any, index: number) => (
+            <div key={index} className="p-4 bg-slate-900 rounded-lg border border-slate-600 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-400">제품 #{index + 1}</span>
+                <button
+                  onClick={() => removeArrayItem('content.products', index)}
+                  className="p-1 hover:bg-red-500/20 rounded text-red-400"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <input
+                type="text"
+                value={product.title || ''}
+                onChange={(e) => updateArrayItem('content.products', index, 'title', e.target.value)}
+                placeholder="제품명"
+                className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white"
+              />
+
+              <textarea
+                value={product.description || ''}
+                onChange={(e) => updateArrayItem('content.products', index, 'description', e.target.value)}
+                placeholder="제품 설명"
+                rows={2}
+                className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white resize-none"
+              />
+
+              <input
+                type="text"
+                value={product.link || ''}
+                onChange={(e) => updateArrayItem('content.products', index, 'link', e.target.value)}
+                placeholder="제품 링크"
+                className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white"
+              />
+
+              <IntegratedMediaManager
+                currentMedia={product.image || ''}
+                onMediaSelected={(url) => updateArrayItem('content.products', index, 'image', url)}
+                label="제품 이미지"
+              />
+
+              <div>
+                <label className="block text-sm text-gray-400 mb-2">주요 기능 (쉼표로 구분)</label>
+                <textarea
+                  value={(product.features || []).join(', ')}
+                  onChange={(e) => updateArrayItem('content.products', index, 'features',
+                    e.target.value.split(',').map(f => f.trim()).filter(Boolean)
+                  )}
+                  placeholder="예: 실시간 협업, 3D 뷰어, 자동화"
+                  rows={2}
+                  className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white resize-none"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // === AI Features Section Editor ===
+  const renderAIFeaturesEditor = () => {
+    const features = currentSection?.content?.features || [];
+
+    return (
+      <div className="space-y-4">
+        <EditorField
+          label="섹션 제목"
+          value={currentSection?.content?.title || ''}
+          onChange={(v) => updateField('content.title', v)}
+          placeholder="예: AI 기반 스마트 기능"
+        />
+        <EditorField
+          label="섹션 설명"
+          value={currentSection?.content?.description || ''}
+          onChange={(v) => updateField('content.description', v)}
+          textarea
+          rows={2}
+        />
+
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-medium text-gray-300">AI 기능 목록</label>
+            <button
+              onClick={() => addArrayItem('content.features', {
+                title: '',
+                description: '',
+                icon: '🤖',
+                benefits: []
+              })}
+              className="flex items-center gap-2 px-3 py-1 bg-electric-600 rounded-lg text-sm hover:bg-electric-700"
+            >
+              <Plus className="w-4 h-4" />
+              기능 추가
+            </button>
+          </div>
+
+          {features.map((feature: any, index: number) => (
+            <div key={index} className="p-4 bg-slate-900 rounded-lg border border-slate-600 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-400">기능 #{index + 1}</span>
+                <button
+                  onClick={() => removeArrayItem('content.features', index)}
+                  className="p-1 hover:bg-red-500/20 rounded text-red-400"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-4 gap-2">
+                <input
+                  type="text"
+                  value={feature.icon || ''}
+                  onChange={(e) => updateArrayItem('content.features', index, 'icon', e.target.value)}
+                  placeholder="아이콘"
+                  className="px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white text-center"
+                />
+                <input
+                  type="text"
+                  value={feature.title || ''}
+                  onChange={(e) => updateArrayItem('content.features', index, 'title', e.target.value)}
+                  placeholder="기능명"
+                  className="col-span-3 px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white"
+                />
+              </div>
+
+              <textarea
+                value={feature.description || ''}
+                onChange={(e) => updateArrayItem('content.features', index, 'description', e.target.value)}
+                placeholder="기능 설명"
+                rows={2}
+                className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white resize-none"
+              />
+
+              <div>
+                <label className="block text-sm text-gray-400 mb-2">장점 (쉼표로 구분)</label>
+                <textarea
+                  value={(feature.benefits || []).join(', ')}
+                  onChange={(e) => updateArrayItem('content.features', index, 'benefits',
+                    e.target.value.split(',').map(b => b.trim()).filter(Boolean)
+                  )}
+                  placeholder="예: 시간 절약, 정확도 향상, 자동화"
+                  rows={2}
+                  className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white resize-none"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // === Features Section Editor ===
+  const renderFeaturesEditor = () => {
+    const features = currentSection?.content?.features || [];
+
+    return (
+      <div className="space-y-4">
+        <EditorField
+          label="섹션 제목"
+          value={currentSection?.content?.title || ''}
+          onChange={(v) => updateField('content.title', v)}
+          placeholder="예: 주요 기능"
+        />
+        <EditorField
+          label="섹션 설명"
+          value={currentSection?.content?.description || ''}
+          onChange={(v) => updateField('content.description', v)}
+          textarea
+          rows={2}
+        />
+
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-medium text-gray-300">기능 목록</label>
+            <button
+              onClick={() => addArrayItem('content.features', {
+                title: '',
+                description: '',
+                icon: '✨',
+                image: ''
+              })}
+              className="flex items-center gap-2 px-3 py-1 bg-electric-600 rounded-lg text-sm hover:bg-electric-700"
+            >
+              <Plus className="w-4 h-4" />
+              기능 추가
+            </button>
+          </div>
+
+          {features.map((feature: any, index: number) => (
+            <div key={index} className="p-4 bg-slate-900 rounded-lg border border-slate-600 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-400">기능 #{index + 1}</span>
+                <button
+                  onClick={() => removeArrayItem('content.features', index)}
+                  className="p-1 hover:bg-red-500/20 rounded text-red-400"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-4 gap-2">
+                <input
+                  type="text"
+                  value={feature.icon || ''}
+                  onChange={(e) => updateArrayItem('content.features', index, 'icon', e.target.value)}
+                  placeholder="아이콘"
+                  className="px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white text-center"
+                />
+                <input
+                  type="text"
+                  value={feature.title || ''}
+                  onChange={(e) => updateArrayItem('content.features', index, 'title', e.target.value)}
+                  placeholder="기능명"
+                  className="col-span-3 px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white"
+                />
+              </div>
+
+              <textarea
+                value={feature.description || ''}
+                onChange={(e) => updateArrayItem('content.features', index, 'description', e.target.value)}
+                placeholder="기능 설명"
+                rows={2}
+                className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white resize-none"
+              />
+
+              <IntegratedMediaManager
+                currentMedia={feature.image || ''}
+                onMediaSelected={(url) => updateArrayItem('content.features', index, 'image', url)}
+                label="기능 이미지"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // === Integration Section Editor ===
+  const renderIntegrationEditor = () => {
+    const integrations = currentSection?.content?.integrations || [];
+
+    return (
+      <div className="space-y-4">
+        <EditorField
+          label="섹션 제목"
+          value={currentSection?.content?.title || ''}
+          onChange={(v) => updateField('content.title', v)}
+          placeholder="예: 시스템 연동"
+        />
+        <EditorField
+          label="섹션 설명"
+          value={currentSection?.content?.description || ''}
+          onChange={(v) => updateField('content.description', v)}
+          textarea
+          rows={2}
+        />
+
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-medium text-gray-300">연동 시스템</label>
+            <button
+              onClick={() => addArrayItem('content.integrations', {
+                name: '',
+                logo: '',
+                description: '',
+                category: ''
+              })}
+              className="flex items-center gap-2 px-3 py-1 bg-electric-600 rounded-lg text-sm hover:bg-electric-700"
+            >
+              <Plus className="w-4 h-4" />
+              시스템 추가
+            </button>
+          </div>
+
+          {integrations.map((integration: any, index: number) => (
+            <div key={index} className="p-4 bg-slate-900 rounded-lg border border-slate-600 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-400">시스템 #{index + 1}</span>
+                <button
+                  onClick={() => removeArrayItem('content.integrations', index)}
+                  className="p-1 hover:bg-red-500/20 rounded text-red-400"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <input
+                  type="text"
+                  value={integration.name || ''}
+                  onChange={(e) => updateArrayItem('content.integrations', index, 'name', e.target.value)}
+                  placeholder="시스템명"
+                  className="px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white"
+                />
+                <input
+                  type="text"
+                  value={integration.category || ''}
+                  onChange={(e) => updateArrayItem('content.integrations', index, 'category', e.target.value)}
+                  placeholder="카테고리 (ERP, CAD 등)"
+                  className="px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white"
+                />
+              </div>
+
+              <textarea
+                value={integration.description || ''}
+                onChange={(e) => updateArrayItem('content.integrations', index, 'description', e.target.value)}
+                placeholder="연동 설명"
+                rows={2}
+                className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white resize-none"
+              />
+
+              <IntegratedMediaManager
+                currentMedia={integration.logo || ''}
+                onMediaSelected={(url) => updateArrayItem('content.integrations', index, 'logo', url)}
+                label="시스템 로고"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // === CTA Section Editor ===
   const renderCTAEditor = () => (
     <div className="space-y-4">
       <EditorField
@@ -242,7 +808,6 @@ const AllSectionsEditorV2: React.FC = () => {
         </div>
       </div>
 
-      {/* 배경 이미지 */}
       <IntegratedMediaManager
         currentMedia={currentSection?.content?.backgroundImage || ''}
         onMediaSelected={(url) => updateField('content.backgroundImage', url)}
@@ -251,23 +816,26 @@ const AllSectionsEditorV2: React.FC = () => {
     </div>
   );
 
-  // Render other sections with simplified editors
+  // Main render function
   const renderEditor = () => {
     if (!currentSection) return null;
 
-    if (currentSection.type === 'hero') return renderHeroEditor();
-    if (currentSection.type === 'cta') return renderCTAEditor();
-
-    return (
-      <div className="p-6 bg-slate-800/30 rounded-lg border border-slate-700">
-        <p className="text-gray-400 text-sm mb-4">
-          이 섹션의 상세 편집은 추후 구현 예정입니다.
-        </p>
-        <pre className="text-xs text-gray-500 overflow-auto">
-          {JSON.stringify(currentSection.content, null, 2)}
-        </pre>
-      </div>
-    );
+    switch (currentSection.type) {
+      case 'hero': return renderHeroEditor();
+      case 'stats': return renderStatsEditor();
+      case 'social-proof': return renderSocialProofEditor();
+      case 'products': return renderProductsEditor();
+      case 'ai-features': return renderAIFeaturesEditor();
+      case 'features': return renderFeaturesEditor();
+      case 'integration': return renderIntegrationEditor();
+      case 'cta': return renderCTAEditor();
+      default:
+        return (
+          <div className="p-6 bg-slate-800/30 rounded-lg border border-slate-700">
+            <p className="text-gray-400 text-sm">알 수 없는 섹션 타입입니다.</p>
+          </div>
+        );
+    }
   };
 
   if (loading) {
@@ -285,7 +853,7 @@ const AllSectionsEditorV2: React.FC = () => {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-4xl font-bold bg-gradient-to-r from-electric-400 to-electric-600 bg-clip-text text-transparent">
-              전체 섹션 편집 (V2 - 미디어 지원)
+              전체 섹션 편집 (V2 - 완전판)
             </h1>
             <p className="text-gray-400 mt-2">홈페이지의 모든 섹션을 관리하세요</p>
           </div>
@@ -386,7 +954,9 @@ const AllSectionsEditorV2: React.FC = () => {
                   </label>
                 </div>
 
-                {renderEditor()}
+                <div className="max-h-[calc(100vh-300px)] overflow-y-auto pr-2">
+                  {renderEditor()}
+                </div>
               </div>
             </div>
 
@@ -399,8 +969,12 @@ const AllSectionsEditorV2: React.FC = () => {
                 </h3>
 
                 <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-lg p-8 min-h-[400px]">
-                  <div className="text-gray-400 text-sm">
-                    {currentSection.type} 섹션의 미리보기는 홈페이지에서 확인하세요.
+                  <div className="text-gray-400 text-sm text-center">
+                    <p className="mb-2">"{getSectionTypeName(currentSection.type)}" 섹션</p>
+                    <p className="text-xs">미리보기는 홈페이지에서 확인하세요.</p>
+                    <p className="text-xs mt-2">
+                      {currentSection.isPublished ? '✅ 게시됨' : '⚠️ 비공개'}
+                    </p>
                   </div>
                 </div>
               </div>
