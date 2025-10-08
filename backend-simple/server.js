@@ -10,6 +10,7 @@ require('dotenv').config();
 // Import services
 const aiService = require('./services/aiService');
 const mediaService = require('./services/mediaService');
+const geminiService = require('./services/gemini.service');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -444,6 +445,149 @@ app.delete('/api/admin/media/:filename', authenticate, async (req, res) => {
   }
 });
 
+// ===== GEMINI API ENDPOINTS =====
+
+// Generate text with Gemini
+app.post('/api/admin/gemini/generate-text', authenticate, async (req, res) => {
+  try {
+    const { prompt, model } = req.body;
+
+    if (!prompt) {
+      return res.status(400).json({ error: 'Prompt is required' });
+    }
+
+    const text = await geminiService.generateText(prompt, model);
+
+    res.json({
+      success: true,
+      provider: 'gemini',
+      model: model || 'gemini-2.0-flash-exp',
+      text: text
+    });
+  } catch (error) {
+    console.error('[Gemini] Text generation error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Generate image with Gemini Imagen 4.0
+app.post('/api/admin/gemini/generate-image', authenticate, async (req, res) => {
+  try {
+    const { prompt, numberOfImages, imageSize, aspectRatio, model } = req.body;
+
+    if (!prompt) {
+      return res.status(400).json({ error: 'Prompt is required' });
+    }
+
+    const options = {
+      numberOfImages: numberOfImages || 1,
+      imageSize: imageSize || '1K',
+      aspectRatio: aspectRatio || '1:1',
+      model: model || 'imagen-4.0-generate-001'
+    };
+
+    const images = await geminiService.generateImage(prompt, options);
+
+    // Save first image to uploads directory
+    const uploadDir = path.join(__dirname, 'uploads');
+    const filename = `gemini_${Date.now()}.png`;
+    const savedPath = await geminiService.saveImageToFile(
+      images[0].data,
+      filename,
+      uploadDir
+    );
+
+    // Optimize with media service
+    const mediaInfo = await mediaService.processImageFile(savedPath, {
+      maxWidth: 1920,
+      maxHeight: 1080,
+      quality: 85,
+      format: 'webp'
+    });
+
+    res.json({
+      success: true,
+      provider: 'gemini-imagen',
+      model: options.model,
+      prompt: prompt,
+      images: images.length,
+      media: mediaInfo
+    });
+  } catch (error) {
+    console.error('[Gemini] Image generation error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Generate video with Gemini Veo 3.0
+app.post('/api/admin/gemini/generate-video', authenticate, async (req, res) => {
+  try {
+    const { prompt, aspectRatio, resolution, negativePrompt, model } = req.body;
+
+    if (!prompt) {
+      return res.status(400).json({ error: 'Prompt is required' });
+    }
+
+    const options = {
+      aspectRatio: aspectRatio || '16:9',
+      resolution: resolution || '720p',
+      negativePrompt: negativePrompt || '',
+      model: model || 'veo-3.0-generate-001'
+    };
+
+    const result = await geminiService.generateVideo(prompt, options);
+
+    res.json({
+      success: true,
+      provider: 'gemini-veo',
+      model: options.model,
+      prompt: prompt,
+      operationId: result.operationId,
+      status: result.status,
+      message: result.message
+    });
+  } catch (error) {
+    console.error('[Gemini] Video generation error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Check Gemini video generation status
+app.get('/api/admin/gemini/video-status/:operationId', authenticate, async (req, res) => {
+  try {
+    const { operationId } = req.params;
+
+    const result = await geminiService.checkVideoStatus(operationId);
+
+    if (result.status === 'completed') {
+      // Save video to uploads directory
+      const uploadDir = path.join(__dirname, 'uploads');
+      const filename = `gemini_video_${Date.now()}.mp4`;
+      const savedPath = await geminiService.saveVideoToFile(
+        result.video.data,
+        filename,
+        uploadDir
+      );
+
+      res.json({
+        success: true,
+        status: 'completed',
+        videoUrl: `/uploads/${filename}`,
+        videoPath: savedPath
+      });
+    } else {
+      res.json({
+        success: true,
+        status: result.status,
+        message: result.message
+      });
+    }
+  } catch (error) {
+    console.error('[Gemini] Video status check error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Start server
 app.listen(PORT, async () => {
   await initData();
@@ -453,13 +597,17 @@ app.listen(PORT, async () => {
     const envConfig = {
       openaiApiKey: process.env.OPENAI_API_KEY,
       anthropicApiKey: process.env.ANTHROPIC_API_KEY,
-      geminiApiKey: process.env.GOOGLE_API_KEY
+      geminiApiKey: process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY
     };
 
     // Initialize AI services if any API key is present
     if (envConfig.openaiApiKey || envConfig.anthropicApiKey || envConfig.geminiApiKey) {
       aiService.initializeClients(envConfig);
       console.log('🤖 AI services initialized from environment variables');
+
+      if (envConfig.geminiApiKey) {
+        console.log('✨ Gemini API initialized (Text, Imagen 4.0, Veo 3.0)');
+      }
     } else {
       // Try loading from data.json as fallback
       const data = await loadData();
@@ -476,4 +624,9 @@ app.listen(PORT, async () => {
 
   console.log(`✅ Simple CMS Backend running on http://localhost:${PORT}`);
   console.log('📧 Admin login: admin@papsnet.com / admin123');
+  console.log('🔥 Gemini API endpoints:');
+  console.log('   POST /api/admin/gemini/generate-text');
+  console.log('   POST /api/admin/gemini/generate-image (Imagen 4.0)');
+  console.log('   POST /api/admin/gemini/generate-video (Veo 3.0)');
+  console.log('   GET  /api/admin/gemini/video-status/:operationId');
 });
