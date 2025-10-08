@@ -7,7 +7,7 @@ interface AIImageGeneratorProps {
 }
 
 const AIImageGenerator: React.FC<AIImageGeneratorProps> = ({ onImageGenerated }) => {
-  const [provider, setProvider] = useState<'openai-dalle' | 'gemini-imagen'>('gemini-imagen');
+  const [provider, setProvider] = useState<'openai-dalle' | 'gemini-imagen'>('openai-dalle');
   const [prompt, setPrompt] = useState('');
 
   // DALL-E 3 옵션
@@ -87,15 +87,14 @@ const AIImageGenerator: React.FC<AIImageGeneratorProps> = ({ onImageGenerated })
         <label className="block text-sm font-medium text-gray-700 mb-2">AI Provider</label>
         <div className="grid grid-cols-2 gap-3">
           <button
-            onClick={() => setProvider('gemini-imagen')}
-            className={`px-4 py-3 rounded-lg transition-all ${
-              provider === 'gemini-imagen'
-                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            disabled
+            className="px-4 py-3 rounded-lg transition-all bg-gray-200 text-gray-500 cursor-not-allowed relative"
           >
             <div className="font-semibold">✨ Gemini Imagen 4.0</div>
-            <div className="text-xs opacity-80 mt-1">Google's latest AI</div>
+            <div className="text-xs opacity-80 mt-1">Requires Vertex AI setup</div>
+            <div className="absolute top-1 right-1">
+              <span className="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded">Setup Required</span>
+            </div>
           </button>
           <button
             onClick={() => setProvider('openai-dalle')}

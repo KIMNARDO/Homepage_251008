@@ -1,4 +1,5 @@
-const { GoogleGenAI } = require('@google/genai');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 
@@ -6,7 +7,7 @@ const path = require('path');
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || 'AIzaSyDitwc_1QE76t0c-O8yh4u0pAueZJGSPkc';
 
 // Gemini 클라이언트 초기화
-const genAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 /**
  * Gemini 텍스트 생성 서비스
@@ -14,17 +15,15 @@ const genAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
  * @param {string} model - 사용할 모델 (기본값: gemini-2.0-flash-exp)
  * @returns {Promise<string>} 생성된 텍스트
  */
-async function generateText(prompt, model = 'gemini-2.0-flash-exp') {
+async function generateText(prompt, modelName = 'gemini-2.0-flash-exp') {
   try {
-    console.log(`[Gemini Text] Generating with model: ${model}`);
+    console.log(`[Gemini Text] Generating with model: ${modelName}`);
     console.log(`[Gemini Text] Prompt: ${prompt.substring(0, 100)}...`);
 
-    const response = await genAI.models.generateContent({
-      model: model,
-      contents: prompt,
-    });
-
-    const generatedText = response.text || response.candidates?.[0]?.content?.parts?.[0]?.text;
+    const model = genAI.getGenerativeModel({ model: modelName });
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const generatedText = response.text();
 
     if (!generatedText) {
       throw new Error('No text generated from Gemini API');
@@ -57,37 +56,20 @@ async function generateImage(prompt, options = {}) {
       model = 'imagen-4.0-generate-001'
     } = options;
 
-    console.log(`[Gemini Imagen] Generating ${numberOfImages} image(s) with model: ${model}`);
+    console.log(`[Gemini Imagen] Image generation requested but Imagen 4.0 requires Google Cloud Vertex AI`);
     console.log(`[Gemini Imagen] Prompt: ${prompt.substring(0, 100)}...`);
     console.log(`[Gemini Imagen] Options:`, { numberOfImages, imageSize, aspectRatio });
 
-    const response = await genAI.models.generateImages({
-      model: model,
-      prompt: prompt,
-      config: {
-        numberOfImages: numberOfImages,
-        imageSize: imageSize,
-        aspectRatio: aspectRatio,
-      },
-    });
-
-    if (!response.generated_images || response.generated_images.length === 0) {
-      throw new Error('No images generated from Gemini Imagen API');
-    }
-
-    console.log(`[Gemini Imagen] Generated ${response.generated_images.length} image(s)`);
-
-    // 이미지를 Base64로 변환하여 반환
-    const images = response.generated_images.map((img, index) => ({
-      index: index,
-      data: img.image, // 이미지 데이터 (Base64 또는 Buffer)
-      mimeType: img.mimeType || 'image/png',
-    }));
-
-    return images;
+    // Gemini API (via @google/generative-ai) does NOT support image generation
+    // Imagen 4.0 requires Google Cloud Vertex AI with proper authentication
+    throw new Error(
+      'Gemini Imagen 4.0 image generation requires Google Cloud Vertex AI setup. ' +
+      'The standard Gemini API does not support image generation. ' +
+      'Please use DALL-E 3 for image generation or configure Vertex AI credentials.'
+    );
   } catch (error) {
     console.error('[Gemini Imagen] Error:', error.message);
-    throw new Error(`Gemini image generation failed: ${error.message}`);
+    throw error;
   }
 }
 
