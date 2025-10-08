@@ -7,11 +7,20 @@ interface AIImageGeneratorProps {
 }
 
 const AIImageGenerator: React.FC<AIImageGeneratorProps> = ({ onImageGenerated }) => {
-  const [provider, setProvider] = useState<'openai-dalle'>('openai-dalle');
+  const [provider, setProvider] = useState<'openai-dalle' | 'gemini-imagen'>('gemini-imagen');
   const [prompt, setPrompt] = useState('');
-  const [size, setSize] = useState<'1024x1024' | '1792x1024' | '1024x1792'>('1024x1024');
+
+  // DALL-E 3 옵션
+  const [dalleSize, setDalleSize] = useState<'1024x1024' | '1792x1024' | '1024x1792'>('1024x1024');
   const [style, setStyle] = useState<'natural' | 'vivid'>('vivid');
   const [quality, setQuality] = useState<'standard' | 'hd'>('hd');
+
+  // Gemini Imagen 4.0 옵션
+  const [numberOfImages, setNumberOfImages] = useState(1);
+  const [imageSize, setImageSize] = useState<'1K' | '2K'>('1K');
+  const [aspectRatio, setAspectRatio] = useState<'1:1' | '3:4' | '4:3' | '9:16' | '16:9'>('1:1');
+  const [imagenModel, setImagenModel] = useState<'imagen-4.0-generate-001' | 'imagen-4.0-ultra-generate-001' | 'imagen-4.0-fast-generate-001'>('imagen-4.0-generate-001');
+
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<any>(null);
   const [error, setError] = useState('');
@@ -27,15 +36,33 @@ const AIImageGenerator: React.FC<AIImageGeneratorProps> = ({ onImageGenerated })
 
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(
-        'http://localhost:8080/api/admin/ai/generate-image',
-        {
-          provider,
-          prompt,
-          options: { size, style, quality }
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+
+      let response;
+      if (provider === 'gemini-imagen') {
+        // Use Gemini Imagen API
+        response = await axios.post(
+          'http://localhost:8080/api/admin/gemini/generate-image',
+          {
+            prompt,
+            numberOfImages,
+            imageSize,
+            aspectRatio,
+            model: imagenModel
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      } else {
+        // Use existing DALL-E API
+        response = await axios.post(
+          'http://localhost:8080/api/admin/ai/generate-image',
+          {
+            provider,
+            prompt,
+            options: { size: dalleSize, style, quality }
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      }
 
       setGeneratedImage(response.data);
       onImageGenerated(response.data.media);
@@ -58,16 +85,28 @@ const AIImageGenerator: React.FC<AIImageGeneratorProps> = ({ onImageGenerated })
       {/* Provider Selection */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2">AI Provider</label>
-        <div className="flex gap-3">
+        <div className="grid grid-cols-2 gap-3">
           <button
-            onClick={() => setProvider('openai-dalle')}
-            className={`flex-1 px-4 py-2 rounded-md transition-colors ${
-              provider === 'openai-dalle'
-                ? 'bg-green-600 text-white'
+            onClick={() => setProvider('gemini-imagen')}
+            className={`px-4 py-3 rounded-lg transition-all ${
+              provider === 'gemini-imagen'
+                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            🖼️ DALL-E 3
+            <div className="font-semibold">✨ Gemini Imagen 4.0</div>
+            <div className="text-xs opacity-80 mt-1">Google's latest AI</div>
+          </button>
+          <button
+            onClick={() => setProvider('openai-dalle')}
+            className={`px-4 py-3 rounded-lg transition-all ${
+              provider === 'openai-dalle'
+                ? 'bg-gradient-to-r from-green-600 to-teal-600 text-white shadow-lg'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            <div className="font-semibold">🖼️ DALL-E 3</div>
+            <div className="text-xs opacity-80 mt-1">OpenAI</div>
           </button>
         </div>
       </div>
@@ -86,45 +125,114 @@ const AIImageGenerator: React.FC<AIImageGeneratorProps> = ({ onImageGenerated })
         />
       </div>
 
-      {/* Image Settings */}
-      <div className="grid grid-cols-3 gap-4 mb-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Size</label>
-          <select
-            value={size}
-            onChange={(e) => setSize(e.target.value as any)}
-            className="w-full px-3 py-2 border rounded-md text-sm"
-          >
-            <option value="1024x1024">Square (1024×1024)</option>
-            <option value="1792x1024">Wide (1792×1024)</option>
-            <option value="1024x1792">Tall (1024×1792)</option>
-          </select>
-        </div>
+      {/* Gemini Imagen 4.0 Settings */}
+      {provider === 'gemini-imagen' && (
+        <div className="space-y-3 mb-4 p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border border-blue-200">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Model</label>
+              <select
+                value={imagenModel}
+                onChange={(e) => setImagenModel(e.target.value as any)}
+                className="w-full px-3 py-2 border rounded-md text-sm"
+              >
+                <option value="imagen-4.0-generate-001">Standard (Best Quality)</option>
+                <option value="imagen-4.0-ultra-generate-001">Ultra (Premium)</option>
+                <option value="imagen-4.0-fast-generate-001">Fast (Quick)</option>
+              </select>
+            </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Style</label>
-          <select
-            value={style}
-            onChange={(e) => setStyle(e.target.value as any)}
-            className="w-full px-3 py-2 border rounded-md text-sm"
-          >
-            <option value="vivid">Vivid</option>
-            <option value="natural">Natural</option>
-          </select>
-        </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Number of Images</label>
+              <select
+                value={numberOfImages}
+                onChange={(e) => setNumberOfImages(Number(e.target.value))}
+                className="w-full px-3 py-2 border rounded-md text-sm"
+              >
+                <option value={1}>1 image</option>
+                <option value={2}>2 images</option>
+                <option value={3}>3 images</option>
+                <option value={4}>4 images</option>
+              </select>
+            </div>
+          </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Quality</label>
-          <select
-            value={quality}
-            onChange={(e) => setQuality(e.target.value as any)}
-            className="w-full px-3 py-2 border rounded-md text-sm"
-          >
-            <option value="hd">HD</option>
-            <option value="standard">Standard</option>
-          </select>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Image Size</label>
+              <select
+                value={imageSize}
+                onChange={(e) => setImageSize(e.target.value as any)}
+                className="w-full px-3 py-2 border rounded-md text-sm"
+              >
+                <option value="1K">1K (1024px)</option>
+                <option value="2K">2K (2048px)</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Aspect Ratio</label>
+              <select
+                value={aspectRatio}
+                onChange={(e) => setAspectRatio(e.target.value as any)}
+                className="w-full px-3 py-2 border rounded-md text-sm"
+              >
+                <option value="1:1">Square (1:1)</option>
+                <option value="16:9">Landscape (16:9)</option>
+                <option value="9:16">Portrait (9:16)</option>
+                <option value="4:3">Classic (4:3)</option>
+                <option value="3:4">Vertical (3:4)</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="text-xs text-blue-700 bg-blue-100 p-2 rounded">
+            💡 All Gemini Imagen images include SynthID watermark for authenticity
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* DALL-E 3 Settings */}
+      {provider === 'openai-dalle' && (
+        <div className="grid grid-cols-3 gap-4 mb-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Size</label>
+            <select
+              value={dalleSize}
+              onChange={(e) => setDalleSize(e.target.value as any)}
+              className="w-full px-3 py-2 border rounded-md text-sm"
+            >
+              <option value="1024x1024">Square (1024×1024)</option>
+              <option value="1792x1024">Wide (1792×1024)</option>
+              <option value="1024x1792">Tall (1024×1792)</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Style</label>
+            <select
+              value={style}
+              onChange={(e) => setStyle(e.target.value as any)}
+              className="w-full px-3 py-2 border rounded-md text-sm"
+            >
+              <option value="vivid">Vivid</option>
+              <option value="natural">Natural</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Quality</label>
+            <select
+              value={quality}
+              onChange={(e) => setQuality(e.target.value as any)}
+              className="w-full px-3 py-2 border rounded-md text-sm"
+            >
+              <option value="hd">HD</option>
+              <option value="standard">Standard</option>
+            </select>
+          </div>
+        </div>
+      )}
 
       {/* Error Message */}
       {error && (
@@ -137,7 +245,11 @@ const AIImageGenerator: React.FC<AIImageGeneratorProps> = ({ onImageGenerated })
       <button
         onClick={generateImage}
         disabled={isGenerating || !prompt.trim()}
-        className="w-full px-4 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-medium rounded-md hover:from-pink-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+        className={`w-full px-4 py-3 text-white font-medium rounded-md transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+          provider === 'gemini-imagen'
+            ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700'
+            : 'bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700'
+        }`}
       >
         {isGenerating ? (
           <span className="flex items-center justify-center">
@@ -145,10 +257,13 @@ const AIImageGenerator: React.FC<AIImageGeneratorProps> = ({ onImageGenerated })
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            Generating image with DALL-E 3...
+            {provider === 'gemini-imagen'
+              ? `Generating with Gemini Imagen 4.0 (${imagenModel.includes('ultra') ? 'Ultra' : imagenModel.includes('fast') ? 'Fast' : 'Standard'})...`
+              : 'Generating with DALL-E 3...'
+            }
           </span>
         ) : (
-          '✨ Generate Image with DALL-E 3'
+          `✨ Generate Image with ${provider === 'gemini-imagen' ? 'Gemini Imagen 4.0' : 'DALL-E 3'}`
         )}
       </button>
 
@@ -162,10 +277,12 @@ const AIImageGenerator: React.FC<AIImageGeneratorProps> = ({ onImageGenerated })
             className="mt-6"
           >
             <div className="flex items-center justify-between mb-3">
-              <h4 className="font-medium text-green-900">✅ Image Generated!</h4>
+              <h4 className="font-medium text-green-900">
+                ✅ Image Generated with {generatedImage.provider === 'gemini-imagen' ? 'Gemini Imagen 4.0' : 'DALL-E 3'}!
+              </h4>
               <button
                 onClick={regenerate}
-                className="text-sm text-green-700 hover:text-green-800"
+                className="text-sm text-green-700 hover:text-green-800 flex items-center gap-1"
               >
                 🔄 Regenerate
               </button>
@@ -178,6 +295,11 @@ const AIImageGenerator: React.FC<AIImageGeneratorProps> = ({ onImageGenerated })
                 alt="Generated"
                 className="w-full h-auto"
               />
+              {generatedImage.provider === 'gemini-imagen' && (
+                <div className="absolute bottom-2 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">
+                  SynthID ✓
+                </div>
+              )}
             </div>
 
             {/* Image Info */}
@@ -188,8 +310,14 @@ const AIImageGenerator: React.FC<AIImageGeneratorProps> = ({ onImageGenerated })
               </div>
               {generatedImage.revisedPrompt && (
                 <div>
-                  <strong>DALL-E Revised Prompt:</strong>
+                  <strong>Revised Prompt:</strong>
                   <p className="text-gray-600 mt-1">{generatedImage.revisedPrompt}</p>
+                </div>
+              )}
+              {generatedImage.model && (
+                <div className="flex items-center gap-2">
+                  <strong>Model:</strong>
+                  <span className="text-gray-600">{generatedImage.model}</span>
                 </div>
               )}
               <div className="flex justify-between items-center text-xs text-gray-500">
@@ -198,8 +326,13 @@ const AIImageGenerator: React.FC<AIImageGeneratorProps> = ({ onImageGenerated })
               </div>
             </div>
 
-            <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-md text-sm text-green-800">
+            <div className={`mt-3 p-3 border rounded-md text-sm ${
+              provider === 'gemini-imagen'
+                ? 'bg-blue-50 border-blue-200 text-blue-800'
+                : 'bg-green-50 border-green-200 text-green-800'
+            }`}>
               ✅ Image saved to media library and ready to use!
+              {provider === 'gemini-imagen' && ' (Includes SynthID watermark)'}
             </div>
           </motion.div>
         )}
