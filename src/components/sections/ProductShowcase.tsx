@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useContentStore } from '@/stores/contentStore';
@@ -131,16 +132,66 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({ content: propContent 
     threshold: 0.1,
   });
 
+  const [dataJsonSections, setDataJsonSections] = useState<any[]>([]);
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+
+  // 백엔드에서 섹션 데이터 로드 (히어로 패턴과 동일)
+  const loadSectionsData = () => {
+    axios.get('http://localhost:8080/api/public/sections')
+      .then((response) => {
+        console.log('[ProductShowcase] Loaded sections from data.json:', response.data);
+        const publishedSections = response.data.filter((s: any) => s.isPublished);
+        setDataJsonSections(publishedSections);
+      })
+      .catch((error) => console.error('[ProductShowcase] Failed to load sections:', error));
+  };
+
+  useEffect(() => {
+    loadSectionsData();
+
+    // 관리자 페이지에서 업데이트 이벤트 수신 (히어로 패턴과 동일)
+    const handleSectionsUpdate = (event: CustomEvent) => {
+      console.log('[ProductShowcase] Sections updated:', event.detail);
+      loadSectionsData(); // 새로운 데이터 다시 로드
+    };
+
+    window.addEventListener('sectionsUpdated', handleSectionsUpdate as EventListener);
+    return () => {
+      window.removeEventListener('sectionsUpdated', handleSectionsUpdate as EventListener);
+    };
+  }, []);
+
   // Get content from admin or fallback to static data
   const adminContent = getProductSectionContent();
+
+  // Transform dataJsonSections to product format
+  const dynamicProducts = dataJsonSections.map(section => ({
+    id: section.id,
+    title: section.title,
+    subtitle: section.subtitle || '',
+    description: section.description || '',
+    features: section.features?.filter((f: string) => f) || [],
+    icon: '🚀', // Default icon
+    color: 'from-electric-400 to-electric-600',
+    stats: {
+      status: section.isPublished ? 'Published' : 'Draft'
+    }
+  }));
+
   const content = propContent || adminContent || {
     heading: '혁신적인 PLM 솔루션 라인업',
     subheading: '제품 기획부터 폐기까지 전체 라이프사이클을 관리하는 통합 솔루션으로 기업의 디지털 전환을 가속화합니다',
-    products: FALLBACK_PRODUCTS
+    products: dynamicProducts.length > 0 ? dynamicProducts : FALLBACK_PRODUCTS
   };
 
   const [selectedProduct, setSelectedProduct] = useState(content.products[0] || FALLBACK_PRODUCTS[0]);
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+
+  // Update selected product when content changes
+  useEffect(() => {
+    if (content.products.length > 0) {
+      setSelectedProduct(content.products[0]);
+    }
+  }, [dataJsonSections]);
 
   const containerVariants = {
     hidden: { opacity: 0 },

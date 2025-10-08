@@ -4,7 +4,12 @@ const fs = require('fs').promises;
 const path = require('path');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const multer = require('multer');
 require('dotenv').config();
+
+// Import services
+const aiService = require('./services/aiService');
+const mediaService = require('./services/mediaService');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -21,6 +26,24 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' })); // 이미지 업로드를 위한 크기 제한 증가
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(express.static('public'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve uploaded media
+
+// Multer configuration for file uploads
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 100 * 1024 * 1024 }, // 100MB limit
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = [
+      'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+      'video/mp4', 'video/webm', 'video/quicktime'
+    ];
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type. Only images and videos are allowed.'));
+    }
+  }
+});
 
 // Simple file-based storage
 const DATA_FILE = path.join(__dirname, 'data.json');
@@ -228,9 +251,179 @@ app.delete('/api/admin/sections/:id', authenticate, async (req, res) => {
   }
 });
 
+// ===== AI ENDPOINTS =====
+
+// Initialize AI clients with API keys
+app.post('/api/admin/ai/config', authenticate, async (req, res) => {
+  try {
+    const { openaiApiKey, anthropicApiKey, geminiApiKey } = req.body;
+
+    const data = await loadData();
+    data.aiConfig = {
+      openaiApiKey: openaiApiKey || data.aiConfig?.openaiApiKey,
+      anthropicApiKey: anthropicApiKey || data.aiConfig?.anthropicApiKey,
+      geminiApiKey: geminiApiKey || data.aiConfig?.geminiApiKey,
+      updatedAt: new Date().toISOString()
+    };
+
+    await saveData(data);
+
+    // Initialize AI clients
+    aiService.initializeClients(data.aiConfig);
+
+    res.json({ success: true, message: 'AI configuration updated' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get AI configuration status (without exposing keys)
+app.get('/api/admin/ai/config', authenticate, async (req, res) => {
+  try {
+    const data = await loadData();
+    const config = data.aiConfig || {};
+
+    res.json({
+      hasOpenAI: !!config.openaiApiKey,
+      hasClaude: !!config.anthropicApiKey,
+      hasGemini: !!config.geminiApiKey,
+      updatedAt: config.updatedAt
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Generate text content with AI
+app.post('/api/admin/ai/generate-text', authenticate, async (req, res) => {
+  try {
+    const { provider, prompt, sectionType, options } = req.body;
+
+    if (!provider || !prompt) {
+      return res.status(400).json({ error: 'Provider and prompt are required' });
+    }
+
+    // Load AI config and initialize if needed
+    const data = await loadData();
+    if (data.aiConfig) {
+      aiService.initializeClients(data.aiConfig);
+    }
+
+    let result;
+    if (sectionType) {
+      result = await aiService.generateSectionContent(provider, sectionType, prompt, options);
+    } else {
+      result = await aiService.generateText(provider, prompt, options);
+    }
+
+    res.json(result);
+  } catch (error) {
+    console.error('[AI] Text generation error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Generate image with AI
+app.post('/api/admin/ai/generate-image', authenticate, async (req, res) => {
+  try {
+    const { provider, prompt, options } = req.body;
+
+    if (!provider || !prompt) {
+      return res.status(400).json({ error: 'Provider and prompt are required' });
+    }
+
+    // Load AI config and initialize if needed
+    const data = await loadData();
+    if (data.aiConfig) {
+      aiService.initializeClients(data.aiConfig);
+    }
+
+    // Generate image
+    const result = await aiService.generateImage(provider, prompt, options);
+
+    // Download and save image locally
+    const mediaInfo = await mediaService.downloadAIImage(result.url, {
+      provider: result.provider,
+      prompt: prompt,
+      revisedPrompt: result.revisedPrompt,
+      timestamp: new Date().toISOString()
+    });
+
+    res.json({
+      ...result,
+      media: mediaInfo
+    });
+  } catch (error) {
+    console.error('[AI] Image generation error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===== MEDIA ENDPOINTS =====
+
+// Upload media file
+app.post('/api/admin/media/upload', authenticate, upload.single('file'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    let mediaInfo;
+    const fileType = req.file.mimetype.startsWith('image/') ? 'image' : 'video';
+
+    if (fileType === 'image') {
+      mediaInfo = await mediaService.processImage(req.file, {
+        maxWidth: 1920,
+        maxHeight: 1080,
+        quality: 85,
+        format: 'webp'
+      });
+    } else if (fileType === 'video') {
+      mediaInfo = await mediaService.processVideo(req.file);
+    }
+
+    res.json({ success: true, media: mediaInfo });
+  } catch (error) {
+    console.error('[Media] Upload error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// List all media files
+app.get('/api/admin/media', authenticate, async (req, res) => {
+  try {
+    const mediaList = await mediaService.listMedia();
+    res.json(mediaList);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Delete media file
+app.delete('/api/admin/media/:filename', authenticate, async (req, res) => {
+  try {
+    await mediaService.deleteMedia(req.params.filename);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Start server
 app.listen(PORT, async () => {
   await initData();
+
+  // Initialize AI clients if config exists
+  try {
+    const data = await loadData();
+    if (data.aiConfig) {
+      aiService.initializeClients(data.aiConfig);
+      console.log('🤖 AI services initialized');
+    }
+  } catch (error) {
+    console.log('⚠️  AI services not configured yet');
+  }
+
   console.log(`✅ Simple CMS Backend running on http://localhost:${PORT}`);
   console.log('📧 Admin login: admin@papsnet.com / admin123');
 });

@@ -186,3 +186,28 @@ mvn flyway:migrate
   - 패키지: `entity`, `repository`, `service`, `controller`, `dto`, `security`, `enums`.
 
 필요 시 이 문서를 계속 업데이트해 최신 상태를 기록해주세요.
+깃허브를 위한 지침
+1. github 푸쉬를 위해 다음 저장 사용
+github 저장소 주소: https://github.com/KIMNARDO/Homepage_251008
+Git GUB의 Personal Access Token: [보안상 .env 파일에서 관리]
+
+2. 원격 저장소에 푸시할 때, 먼저 HTTP 버퍼 크기를 늘리고 조금 씩 나누어 푸시할 것. 에러 시 작은 변경사항만 포함하는 새커밋을 만들어 푸시할 것
+3. PLAN.md 파일의 작업이 한단계 진행될때마다 PLAN.md 파일에 진행상황 체크하고, 깃허브에 반영할 것
+
+## API Keys 관리
+
+**보안상 모든 API 키는 .env 파일에서 관리합니다:**
+
+- OpenAI API Key: OPENAI_API_KEY 환경변수 사용
+- Claude API Key: CLAUDE_API_KEY 환경변수 사용
+- Google Gemini API Key: GEMINI_API_KEY 환경변수 사용
+
+`.env` 파일 예시:
+```
+OPENAI_API_KEY=your_openai_key_here
+CLAUDE_API_KEY=your_claude_key_here
+GEMINI_API_KEY=your_gemini_key_here
+```
+
+**주의: .env 파일은 절대 git에 커밋하지 마세요!**
+

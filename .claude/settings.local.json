@@ -44,7 +44,14 @@
       "Bash(git init:*)",
       "Bash(git add:*)",
       "Bash(del nul)",
-      "Bash(del backend-simplenul)"
+      "Bash(del backend-simplenul)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Add admin panel with hierarchical navigation and body section editor\n\nMajor Features:\n- Admin authentication system with JWT\n- Hero section editor with image upload (up to 50MB)\n- Body section editor with CRUD functionality\n- Hierarchical admin navigation menu (페이지 관리 > 히어로/바디)\n- Backend API with increased payload limits\n\nFrontend:\n- React 18 + TypeScript + Vite\n- Tailwind CSS + Framer Motion animations\n- Admin dashboard with modern UI\n- Real-time preview for hero section edits\n- Image/video upload support (GIF, MP4)\n\nBackend:\n- Node.js Express server (Simple CMS)\n- File-based JSON storage\n- JWT authentication\n- CORS enabled\n- Increased payload limit to 50MB\n\nAdmin Pages:\n- Dashboard (/admin)\n- Hero Editor (/admin/hero)\n- Body Editor (/admin/body)\n- Navigation Manager (/admin/navigation)\n- Settings (/admin/settings)\n\nChanges:\n- Remove unnecessary admin categories (media, users, analytics)\n- Implement collapsible menu structure for better UX\n- Add background image support for hero section\n- Fix backend image upload size limits\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git remote add:*)",
+      "Bash(git config:*)",
+      "Bash(git push:*)",
+      "Bash(del \"d:\\Claude_Code\\HomePAGE_V6.0_250920\\src\\pages\\admin\\BodySectionEditor.tsx\")",
+      "Bash(grep:*)",
+      "Bash(timeout 5 bash -c 'until curl -s http://localhost:8080/ > /dev/null 2>&1; do sleep 0.5; done && curl -s http://localhost:8080/')"
     ],
     "deny": [],
     "ask": []
