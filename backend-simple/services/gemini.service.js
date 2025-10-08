@@ -1,4 +1,6 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { PredictionServiceClient } = require('@google-cloud/aiplatform');
+const { helpers } = require('@google-cloud/aiplatform');
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
@@ -6,8 +8,32 @@ const path = require('path');
 // Gemini API 키 (환경 변수에서 로드)
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || 'AIzaSyDitwc_1QE76t0c-O8yh4u0pAueZJGSPkc';
 
+// Google Cloud 설정
+const GOOGLE_CLOUD_PROJECT_ID = process.env.GOOGLE_CLOUD_PROJECT_ID;
+const GOOGLE_CLOUD_LOCATION = process.env.GOOGLE_CLOUD_LOCATION || 'us-central1';
+
 // Gemini 클라이언트 초기화
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+
+// Vertex AI 클라이언트 초기화 (Imagen 3용)
+let predictionClient = null;
+if (GOOGLE_CLOUD_PROJECT_ID) {
+  const clientOptions = {
+    apiEndpoint: `${GOOGLE_CLOUD_LOCATION}-aiplatform.googleapis.com`,
+  };
+
+  // 서비스 계정 키 파일이 있는 경우
+  if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    clientOptions.keyFilename = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+  }
+
+  try {
+    predictionClient = new PredictionServiceClient(clientOptions);
+    console.log('[Vertex AI] Prediction client initialized successfully');
+  } catch (error) {
+    console.warn('[Vertex AI] Failed to initialize prediction client:', error.message);
+  }
+}
 
 /**
  * Gemini 텍스트 생성 서비스
@@ -47,29 +73,97 @@ async function generateText(prompt, modelName = 'gemini-2.0-flash-exp') {
  * @param {string} options.model - 사용할 모델 (기본값: imagen-4.0-generate-001)
  * @returns {Promise<Array>} 생성된 이미지 배열
  */
+/**
+ * Imagen 3 이미지 생성 (Vertex AI)
+ */
 async function generateImage(prompt, options = {}) {
   try {
     const {
       numberOfImages = 1,
-      imageSize = '1K',
       aspectRatio = '1:1',
-      model = 'imagen-4.0-generate-001'
+      model = 'imagen-3.0-generate-001'
     } = options;
 
-    console.log(`[Gemini Imagen] Image generation requested but Imagen 4.0 requires Google Cloud Vertex AI`);
-    console.log(`[Gemini Imagen] Prompt: ${prompt.substring(0, 100)}...`);
-    console.log(`[Gemini Imagen] Options:`, { numberOfImages, imageSize, aspectRatio });
+    console.log(`[Imagen 3] Generating image with Vertex AI`);
+    console.log(`[Imagen 3] Prompt: ${prompt.substring(0, 100)}...`);
+    console.log(`[Imagen 3] Options:`, { numberOfImages, aspectRatio, model });
 
-    // Gemini API (via @google/generative-ai) does NOT support image generation
-    // Imagen 4.0 requires Google Cloud Vertex AI with proper authentication
-    throw new Error(
-      'Gemini Imagen 4.0 image generation requires Google Cloud Vertex AI setup. ' +
-      'The standard Gemini API does not support image generation. ' +
-      'Please use DALL-E 3 for image generation or configure Vertex AI credentials.'
-    );
+    // Check if Vertex AI is configured
+    if (!GOOGLE_CLOUD_PROJECT_ID) {
+      throw new Error(
+        'Google Cloud Project ID is not configured. ' +
+        'Please set GOOGLE_CLOUD_PROJECT_ID environment variable.'
+      );
+    }
+
+    if (!predictionClient) {
+      throw new Error(
+        'Vertex AI Prediction client is not initialized. ' +
+        'Please check your Google Cloud credentials.'
+      );
+    }
+
+    // Map aspect ratio to Imagen 3 format
+    const aspectRatioMap = {
+      '1:1': '1:1',
+      '3:4': '3:4',
+      '4:3': '4:3',
+      '9:16': '9:16',
+      '16:9': '16:9'
+    };
+
+    const imagenAspectRatio = aspectRatioMap[aspectRatio] || '1:1';
+
+    // Prepare the request for Imagen 3
+    const endpoint = `projects/${GOOGLE_CLOUD_PROJECT_ID}/locations/${GOOGLE_CLOUD_LOCATION}/publishers/google/models/${model}`;
+
+    const parameters = helpers.toValue({
+      sampleCount: numberOfImages,
+      aspectRatio: imagenAspectRatio,
+      safetySetting: 'block_some',
+      personGeneration: 'allow_adult',
+    });
+
+    const instances = [
+      helpers.toValue({
+        prompt: prompt,
+      }),
+    ];
+
+    const request = {
+      endpoint,
+      instances,
+      parameters,
+    };
+
+    console.log(`[Imagen 3] Sending request to Vertex AI...`);
+    const [response] = await predictionClient.predict(request);
+
+    console.log(`[Imagen 3] Response received from Vertex AI`);
+
+    // Extract generated images from response
+    const predictions = response.predictions;
+    if (!predictions || predictions.length === 0) {
+      throw new Error('No images generated from Imagen 3');
+    }
+
+    const images = predictions.map((prediction, index) => {
+      // Imagen 3 returns base64 encoded images
+      const imageData = prediction.structValue.fields.bytesBase64Encoded.stringValue;
+
+      return {
+        index: index,
+        data: imageData, // Base64 encoded image
+        mimeType: 'image/png',
+      };
+    });
+
+    console.log(`[Imagen 3] Generated ${images.length} image(s) successfully`);
+
+    return images;
   } catch (error) {
-    console.error('[Gemini Imagen] Error:', error.message);
-    throw error;
+    console.error('[Imagen 3] Error:', error.message);
+    throw new Error(`Imagen 3 generation failed: ${error.message}`);
   }
 }
 

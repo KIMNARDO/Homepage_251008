@@ -105,10 +105,10 @@ const AIImageGenerator: React.FC<AIImageGeneratorProps> = ({ onImageGenerated })
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            <div className="font-semibold">✨ Gemini Imagen 4.0</div>
-            <div className="text-xs opacity-80 mt-1">Google's latest AI</div>
+            <div className="font-semibold">✨ Imagen 3</div>
+            <div className="text-xs opacity-80 mt-1">Google Vertex AI</div>
             <div className="absolute top-1 right-1">
-              <span className="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded">Beta</span>
+              <span className="text-xs bg-blue-500 text-white px-2 py-0.5 rounded">Vertex AI</span>
             </div>
           </button>
           <button
@@ -142,17 +142,22 @@ const AIImageGenerator: React.FC<AIImageGeneratorProps> = ({ onImageGenerated })
       {/* Gemini Imagen 4.0 Settings */}
       {provider === 'gemini-imagen' && (
         <div className="space-y-3 mb-4 p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border border-blue-200">
-          <div className="mb-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
             <div className="flex items-start gap-2">
-              <span className="text-yellow-600 text-xl">⚠️</span>
+              <span className="text-blue-600 text-xl">ℹ️</span>
               <div className="flex-1">
-                <h4 className="font-semibold text-yellow-800 mb-1">Setup Required</h4>
-                <p className="text-sm text-yellow-700">
-                  Gemini Imagen 4.0 requires Google Cloud Vertex AI configuration.
-                  The feature will show an error until Vertex AI is properly set up.
+                <h4 className="font-semibold text-blue-800 mb-1">Vertex AI Setup Required</h4>
+                <p className="text-sm text-blue-700 mb-2">
+                  Imagen 3 requires Google Cloud Vertex AI configuration:
                 </p>
-                <p className="text-xs text-yellow-600 mt-2">
-                  💡 <strong>Tip:</strong> Use DALL-E 3 for immediate image generation without additional setup.
+                <ol className="text-xs text-blue-600 space-y-1 ml-4 list-decimal">
+                  <li>Create a Google Cloud project at <a href="https://console.cloud.google.com" target="_blank" rel="noopener noreferrer" className="underline">console.cloud.google.com</a></li>
+                  <li>Enable Vertex AI API</li>
+                  <li>Set <code className="bg-blue-100 px-1 rounded">GOOGLE_CLOUD_PROJECT_ID</code> in backend .env file</li>
+                  <li>(Optional) Configure service account credentials</li>
+                </ol>
+                <p className="text-xs text-blue-600 mt-2">
+                  💡 <strong>Note:</strong> DALL-E 3 works immediately without additional setup.
                 </p>
               </div>
             </div>
@@ -165,9 +170,8 @@ const AIImageGenerator: React.FC<AIImageGeneratorProps> = ({ onImageGenerated })
                 onChange={(e) => setImagenModel(e.target.value as any)}
                 className="w-full px-3 py-2 border rounded-md text-sm"
               >
-                <option value="imagen-4.0-generate-001">Standard (Best Quality)</option>
-                <option value="imagen-4.0-ultra-generate-001">Ultra (Premium)</option>
-                <option value="imagen-4.0-fast-generate-001">Fast (Quick)</option>
+                <option value="imagen-3.0-generate-001">Imagen 3.0 (Standard)</option>
+                <option value="imagen-3.0-generate-fast-001">Imagen 3.0 Fast</option>
               </select>
             </div>
 
