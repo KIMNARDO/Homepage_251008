@@ -67,7 +67,18 @@ const AIImageGenerator: React.FC<AIImageGeneratorProps> = ({ onImageGenerated })
       setGeneratedImage(response.data);
       onImageGenerated(response.data.media);
     } catch (error: any) {
-      setError(error.response?.data?.error || 'Failed to generate image');
+      console.error('Image generation error:', error);
+
+      // Friendly error message for Gemini Imagen
+      const errorMessage = error.response?.data?.error || error.message || 'Failed to generate image';
+      if (errorMessage.includes('Vertex AI') || errorMessage.includes('Imagen')) {
+        setError(
+          '⚠️ Gemini Imagen 4.0 requires Google Cloud Vertex AI setup. ' +
+          'Please use DALL-E 3 for now, or contact the administrator to configure Vertex AI.'
+        );
+      } else {
+        setError(errorMessage);
+      }
     } finally {
       setIsGenerating(false);
     }
@@ -87,13 +98,17 @@ const AIImageGenerator: React.FC<AIImageGeneratorProps> = ({ onImageGenerated })
         <label className="block text-sm font-medium text-gray-700 mb-2">AI Provider</label>
         <div className="grid grid-cols-2 gap-3">
           <button
-            disabled
-            className="px-4 py-3 rounded-lg transition-all bg-gray-200 text-gray-500 cursor-not-allowed relative"
+            onClick={() => setProvider('gemini-imagen')}
+            className={`px-4 py-3 rounded-lg transition-all relative ${
+              provider === 'gemini-imagen'
+                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
           >
             <div className="font-semibold">✨ Gemini Imagen 4.0</div>
-            <div className="text-xs opacity-80 mt-1">Requires Vertex AI setup</div>
+            <div className="text-xs opacity-80 mt-1">Google's latest AI</div>
             <div className="absolute top-1 right-1">
-              <span className="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded">Setup Required</span>
+              <span className="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded">Beta</span>
             </div>
           </button>
           <button
@@ -127,6 +142,21 @@ const AIImageGenerator: React.FC<AIImageGeneratorProps> = ({ onImageGenerated })
       {/* Gemini Imagen 4.0 Settings */}
       {provider === 'gemini-imagen' && (
         <div className="space-y-3 mb-4 p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border border-blue-200">
+          <div className="mb-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <div className="flex items-start gap-2">
+              <span className="text-yellow-600 text-xl">⚠️</span>
+              <div className="flex-1">
+                <h4 className="font-semibold text-yellow-800 mb-1">Setup Required</h4>
+                <p className="text-sm text-yellow-700">
+                  Gemini Imagen 4.0 requires Google Cloud Vertex AI configuration.
+                  The feature will show an error until Vertex AI is properly set up.
+                </p>
+                <p className="text-xs text-yellow-600 mt-2">
+                  💡 <strong>Tip:</strong> Use DALL-E 3 for immediate image generation without additional setup.
+                </p>
+              </div>
+            </div>
+          </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Model</label>
