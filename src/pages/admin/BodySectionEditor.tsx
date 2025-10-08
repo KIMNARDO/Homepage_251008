@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { adminContent } from '@/services/simpleApi';
-import { Save, Eye, Sparkles, Plus, X, ChevronDown } from 'lucide-react';
+import { Save, Eye, Sparkles, Plus, X, ChevronDown, ChevronUp, Trash2, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface BodySection {
@@ -36,11 +36,12 @@ const BodySectionEditor: React.FC = () => {
     try {
       setLoading(true);
       const { data } = await adminContent.getSections();
-      setSections(data || []);
+      const sortedSections = (data || []).sort((a: any, b: any) => (a.order || 0) - (b.order || 0));
+      setSections(sortedSections);
 
       // 첫 번째 섹션 자동 선택
-      if (data && data.length > 0 && !currentSection) {
-        setCurrentSection(data[0]);
+      if (sortedSections.length > 0 && !currentSection) {
+        setCurrentSection(sortedSections[0]);
       }
     } catch (error) {
       console.error('Failed to load sections:', error);
@@ -126,12 +127,31 @@ const BodySectionEditor: React.FC = () => {
     }
   };
 
+  const moveSection = (id: string, direction: 'up' | 'down') => {
+    const index = sections.findIndex(s => s.id === id);
+    if (index === -1) return;
+    if (direction === 'up' && index === 0) return;
+    if (direction === 'down' && index === sections.length - 1) return;
+
+    const newSections = [...sections];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+
+    // Swap
+    [newSections[index], newSections[targetIndex]] = [newSections[targetIndex], newSections[index]];
+
+    // Update order
+    newSections.forEach((section, idx) => {
+      section.order = idx;
+    });
+
+    setSections(newSections);
+  };
+
   const generateAIContent = async () => {
     if (!aiPrompt.trim() || !currentSection) return;
 
     try {
       setIsGenerating(true);
-      // AI 기능은 axios 직접 사용 (simpleApi에 아직 정의되지 않음)
       const token = localStorage.getItem('token');
       const axios = (await import('axios')).default;
       const response = await axios.post(
@@ -208,7 +228,7 @@ const BodySectionEditor: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-6">
       <div className="max-w-7xl mx-auto">
-        {/* 헤더 */}
+        {/* 헤더 - 히어로 페이지와 동일한 레이아웃 */}
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-4xl font-bold bg-gradient-to-r from-electric-400 to-electric-600 bg-clip-text text-transparent">
@@ -252,29 +272,60 @@ const BodySectionEditor: React.FC = () => {
           </div>
         </div>
 
-        {/* 섹션 선택기 */}
-        <div className="mb-6 flex gap-2 overflow-x-auto pb-2">
-          {sections.map((section) => (
-            <button
-              key={section.id}
-              onClick={() => setCurrentSection(section)}
-              className={`px-4 py-2 rounded-lg transition-colors whitespace-nowrap ${
-                currentSection?.id === section.id
-                  ? 'bg-electric-600 text-white'
-                  : 'bg-slate-800 text-gray-400 hover:bg-slate-700'
-              }`}
-            >
-              {section.title}
-              {!section.isPublished && (
-                <span className="ml-2 text-xs opacity-50">(비공개)</span>
-              )}
-            </button>
-          ))}
+        {/* 섹션 리스트 및 순서 관리 */}
+        <div className="mb-6 bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-medium text-gray-300">섹션 목록</h3>
+            <span className="text-xs text-gray-500">총 {sections.length}개</span>
+          </div>
+
+          <div className="flex gap-2 overflow-x-auto pb-2">
+            {sections.map((section, index) => (
+              <div
+                key={section.id}
+                className={`flex items-center gap-2 px-4 py-3 rounded-lg transition-all whitespace-nowrap ${
+                  currentSection?.id === section.id
+                    ? 'bg-electric-600 text-white shadow-lg'
+                    : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
+                }`}
+              >
+                <button
+                  onClick={() => setCurrentSection(section)}
+                  className="flex-1 text-left"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs opacity-50">#{index + 1}</span>
+                    <span className="font-medium">{section.title}</span>
+                    {!section.isPublished && (
+                      <span className="text-xs opacity-50">(비공개)</span>
+                    )}
+                  </div>
+                </button>
+
+                <div className="flex gap-1">
+                  <button
+                    onClick={() => moveSection(section.id, 'up')}
+                    disabled={index === 0}
+                    className="p-1 hover:bg-white/10 rounded disabled:opacity-30"
+                  >
+                    <ChevronUp className="w-3 h-3" />
+                  </button>
+                  <button
+                    onClick={() => moveSection(section.id, 'down')}
+                    disabled={index === sections.length - 1}
+                    className="p-1 hover:bg-white/10 rounded disabled:opacity-30"
+                  >
+                    <ChevronDown className="w-3 h-3" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {currentSection && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* 편집 폼 */}
+            {/* 왼쪽: 편집 폼 */}
             <div className="space-y-6">
               {/* 섹션 타입 */}
               <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
@@ -351,32 +402,35 @@ const BodySectionEditor: React.FC = () => {
 
               {/* 제목 */}
               <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
-                <label className="block text-sm font-medium text-gray-300 mb-2">제목</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">제목 (Title)</label>
                 <input
                   type="text"
                   value={currentSection.title}
                   onChange={(e) => updateField('title', e.target.value)}
+                  placeholder="예: CLIP PLM - 통합 제품 수명주기 관리"
                   className="w-full px-4 py-3 bg-slate-900 border border-slate-600 rounded-lg focus:border-electric-500 focus:ring-2 focus:ring-electric-500/20 outline-none transition-all text-lg"
                 />
               </div>
 
               {/* 부제목 */}
               <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
-                <label className="block text-sm font-medium text-gray-300 mb-2">부제목</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">부제목 (Subtitle)</label>
                 <input
                   type="text"
                   value={currentSection.subtitle || ''}
                   onChange={(e) => updateField('subtitle', e.target.value)}
+                  placeholder="예: Product Lifecycle Management"
                   className="w-full px-4 py-3 bg-slate-900 border border-slate-600 rounded-lg focus:border-electric-500 outline-none transition-all"
                 />
               </div>
 
               {/* 설명 */}
               <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
-                <label className="block text-sm font-medium text-gray-300 mb-2">설명</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">설명 (Description)</label>
                 <textarea
                   value={currentSection.description || ''}
                   onChange={(e) => updateField('description', e.target.value)}
+                  placeholder="섹션의 상세 설명을 입력하세요..."
                   rows={4}
                   className="w-full px-4 py-3 bg-slate-900 border border-slate-600 rounded-lg focus:border-electric-500 outline-none transition-all resize-none"
                 />
@@ -386,7 +440,7 @@ const BodySectionEditor: React.FC = () => {
               {(currentSection.type === 'showcase' || currentSection.type === 'features') && (
                 <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
                   <div className="flex items-center justify-between mb-3">
-                    <label className="text-sm font-medium text-gray-300">주요 특징</label>
+                    <label className="text-sm font-medium text-gray-300">주요 특징 (Features)</label>
                     <button
                       onClick={addFeature}
                       className="text-sm text-electric-400 hover:text-electric-300 flex items-center gap-1"
@@ -435,15 +489,16 @@ const BodySectionEditor: React.FC = () => {
 
                   <button
                     onClick={() => deleteSection(currentSection.id)}
-                    className="px-4 py-2 bg-red-600/20 text-red-400 rounded-lg hover:bg-red-600/30 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-red-600/20 text-red-400 rounded-lg hover:bg-red-600/30 transition-colors"
                   >
+                    <Trash2 className="w-4 h-4" />
                     섹션 삭제
                   </button>
                 </div>
               </div>
             </div>
 
-            {/* 실시간 미리보기 */}
+            {/* 오른쪽: 실시간 미리보기 - 히어로 페이지와 동일한 스타일 */}
             <div className="lg:sticky lg:top-6 h-fit">
               <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
                 <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
@@ -464,23 +519,49 @@ const BodySectionEditor: React.FC = () => {
                       </span>
 
                       {/* 제목 */}
-                      <h2 className="text-3xl font-bold bg-gradient-to-r from-electric-400 to-purple-400 bg-clip-text text-transparent mb-3">
+                      <motion.h2
+                        key={currentSection.title}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-3xl font-bold bg-gradient-to-r from-electric-400 to-purple-400 bg-clip-text text-transparent mb-3"
+                      >
                         {currentSection.title || '제목을 입력하세요'}
-                      </h2>
+                      </motion.h2>
 
                       {/* 부제목 */}
                       {currentSection.subtitle && (
-                        <p className="text-lg text-gray-400 mb-4">{currentSection.subtitle}</p>
+                        <motion.p
+                          key={currentSection.subtitle}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.1 }}
+                          className="text-lg text-gray-400 mb-4"
+                        >
+                          {currentSection.subtitle}
+                        </motion.p>
                       )}
 
                       {/* 설명 */}
                       {currentSection.description && (
-                        <p className="text-gray-300 mb-6">{currentSection.description}</p>
+                        <motion.p
+                          key={currentSection.description}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.2 }}
+                          className="text-gray-300 mb-6 leading-relaxed"
+                        >
+                          {currentSection.description}
+                        </motion.p>
                       )}
 
                       {/* 특징 */}
                       {currentSection.features && currentSection.features.length > 0 && (
-                        <div className="space-y-2">
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.3 }}
+                          className="space-y-2"
+                        >
                           {currentSection.features.map((feature, index) => (
                             feature && (
                               <div key={index} className="flex items-center gap-2">
@@ -489,7 +570,7 @@ const BodySectionEditor: React.FC = () => {
                               </div>
                             )
                           ))}
-                        </div>
+                        </motion.div>
                       )}
                     </motion.div>
                   ) : (
@@ -501,7 +582,7 @@ const BodySectionEditor: React.FC = () => {
 
                 <div className="mt-4 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
                   <p className="text-sm text-blue-400">
-                    💡 <strong>Tip:</strong> 저장하면 홈페이지에 자동으로 반영됩니다.
+                    💡 <strong>Tip:</strong> 왼쪽에서 내용을 수정하면 실시간으로 미리보기가 업데이트됩니다.
                   </p>
                 </div>
               </div>

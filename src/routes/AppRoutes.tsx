@@ -40,6 +40,8 @@ const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
 const AdminHeroEditor = lazy(() => import('@/pages/admin/AdminHeroEditor'));
 const AdminBodyEditor = lazy(() => import('@/pages/admin/AdminBodyEditor'));
 const BodySectionEditor = lazy(() => import('@/pages/admin/BodySectionEditor'));
+const AllSectionsEditor = lazy(() => import('@/pages/admin/AllSectionsEditor'));
+const AllSectionsEditorV2 = lazy(() => import('@/pages/admin/AllSectionsEditorV2'));
 const AdminSettings = lazy(() => import('@/pages/admin/AdminSettings'));
 const AdminNavigation = lazy(() => import('@/pages/admin/SimpleAdminNavigation'));
 
@@ -117,6 +119,7 @@ const AppRoutes: React.FC = () => {
           <Route index element={<AdminDashboard />} />
           <Route path="hero" element={<AdminHeroEditor />} />
           <Route path="body" element={<BodySectionEditor />} />
+          <Route path="all-sections" element={<AllSectionsEditorV2 />} />
           <Route path="navigation" element={<AdminNavigation />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>

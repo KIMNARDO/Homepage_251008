@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useContentStore } from '@/stores/contentStore';
-import type { HeroContent, ProductSectionContent } from '@/stores/contentStore';
 import { motion } from 'framer-motion';
 
 // Sections
@@ -17,14 +15,83 @@ import CTASection from '@/components/sections/CTASection';
 // Data
 import { COMPANY_INFO } from '@/data/papsnet';
 
-const HomePage: React.FC = () => {
-  const { sections, loadContent, isLoading } = useContentStore();
+interface Section {
+  id: string;
+  type: string;
+  isPublished: boolean;
+  order: number;
+  content: any;
+}
 
-  // Load content on mount
+const HomePageDynamic: React.FC = () => {
+  const [sections, setSections] = useState<Section[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load dynamic sections from API
   useEffect(() => {
-    loadContent();
+    loadSections();
     window.scrollTo(0, 0);
+
+    // Listen for real-time updates from admin panel
+    const handleSectionsUpdate = (event: CustomEvent) => {
+      setSections(event.detail);
+    };
+
+    window.addEventListener('allSectionsUpdated', handleSectionsUpdate as EventListener);
+
+    return () => {
+      window.removeEventListener('allSectionsUpdated', handleSectionsUpdate as EventListener);
+    };
   }, []);
+
+  const loadSections = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('http://localhost:8080/api/public/all-sections');
+      if (!response.ok) throw new Error('Failed to load sections');
+
+      const data = await response.json();
+      const sortedSections = data.sort((a: Section, b: Section) => a.order - b.order);
+      setSections(sortedSections);
+    } catch (error) {
+      console.error('Failed to load sections:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const renderSection = (section: Section) => {
+    const { type, content } = section;
+
+    switch (type) {
+      case 'hero':
+        return <HeroSection key={section.id} />;
+
+      case 'stats':
+        return <StatsSection key={section.id} />;
+
+      case 'social-proof':
+        return <SocialProofSection key={section.id} />;
+
+      case 'products':
+        return <ProductShowcase key={section.id} />;
+
+      case 'ai-features':
+        return <AIFeaturesSection key={section.id} />;
+
+      case 'features':
+        return <FeaturesSection key={section.id} />;
+
+      case 'integration':
+        return <IntegrationSection key={section.id} />;
+
+      case 'cta':
+        return <CTASection key={section.id} />;
+
+      default:
+        return null;
+    }
+  };
 
   return (
     <>
@@ -113,15 +180,8 @@ const HomePage: React.FC = () => {
           </div>
         ) : (
           <>
-            {/* Always render core sections - ProductShowcase handles its own data loading */}
-            <HeroSection />
-            <StatsSection />
-            <SocialProofSection />
-            <ProductShowcase />
-            <AIFeaturesSection />
-            <FeaturesSection />
-            <IntegrationSection />
-            <CTASection />
+            {/* Render sections dynamically based on order */}
+            {sections.map((section) => renderSection(section))}
           </>
         )}
       </div>
@@ -129,4 +189,4 @@ const HomePage: React.FC = () => {
   );
 };
 
-export default HomePage;
+export default HomePageDynamic;

@@ -251,6 +251,41 @@ app.delete('/api/admin/sections/:id', authenticate, async (req, res) => {
   }
 });
 
+// ===== ALL SECTIONS ENDPOINTS (for full page editing) =====
+
+// Get all sections (admin)
+app.get('/api/admin/all-sections', authenticate, async (req, res) => {
+  try {
+    const data = await loadData();
+    res.json(data.allSections || []);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update all sections
+app.put('/api/admin/all-sections', authenticate, async (req, res) => {
+  try {
+    const data = await loadData();
+    data.allSections = req.body;
+    await saveData(data);
+    res.json({ success: true, data: data.allSections });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get all sections (public) - only published
+app.get('/api/public/all-sections', async (req, res) => {
+  try {
+    const data = await loadData();
+    const published = (data.allSections || []).filter(s => s.isPublished);
+    res.json(published);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // ===== AI ENDPOINTS =====
 
 // Initialize AI clients with API keys
@@ -413,15 +448,30 @@ app.delete('/api/admin/media/:filename', authenticate, async (req, res) => {
 app.listen(PORT, async () => {
   await initData();
 
-  // Initialize AI clients if config exists
+  // Initialize AI clients from environment variables
   try {
-    const data = await loadData();
-    if (data.aiConfig) {
-      aiService.initializeClients(data.aiConfig);
-      console.log('🤖 AI services initialized');
+    const envConfig = {
+      openaiApiKey: process.env.OPENAI_API_KEY,
+      anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+      geminiApiKey: process.env.GOOGLE_API_KEY
+    };
+
+    // Initialize AI services if any API key is present
+    if (envConfig.openaiApiKey || envConfig.anthropicApiKey || envConfig.geminiApiKey) {
+      aiService.initializeClients(envConfig);
+      console.log('🤖 AI services initialized from environment variables');
+    } else {
+      // Try loading from data.json as fallback
+      const data = await loadData();
+      if (data.aiConfig) {
+        aiService.initializeClients(data.aiConfig);
+        console.log('🤖 AI services initialized from data.json');
+      } else {
+        console.log('⚠️  AI services not configured - no API keys found');
+      }
     }
   } catch (error) {
-    console.log('⚠️  AI services not configured yet');
+    console.log('⚠️  AI services initialization error:', error.message);
   }
 
   console.log(`✅ Simple CMS Backend running on http://localhost:${PORT}`);

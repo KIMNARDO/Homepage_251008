@@ -178,20 +178,23 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({ content: propContent 
     }
   }));
 
+  // Use dynamic products from backend if available, otherwise fallback
+  const products = dynamicProducts.length > 0 ? dynamicProducts : FALLBACK_PRODUCTS;
+
   const content = propContent || adminContent || {
     heading: '혁신적인 PLM 솔루션 라인업',
     subheading: '제품 기획부터 폐기까지 전체 라이프사이클을 관리하는 통합 솔루션으로 기업의 디지털 전환을 가속화합니다',
-    products: dynamicProducts.length > 0 ? dynamicProducts : FALLBACK_PRODUCTS
+    products: products
   };
 
-  const [selectedProduct, setSelectedProduct] = useState(content.products[0] || FALLBACK_PRODUCTS[0]);
+  const [selectedProduct, setSelectedProduct] = useState(products[0] || FALLBACK_PRODUCTS[0]);
 
-  // Update selected product when content changes
+  // Update selected product when backend data changes
   useEffect(() => {
-    if (content.products.length > 0) {
-      setSelectedProduct(content.products[0]);
+    if (products.length > 0) {
+      setSelectedProduct(products[0]);
     }
-  }, [dataJsonSections]);
+  }, [dataJsonSections.length]);
 
   const containerVariants = {
     hidden: { opacity: 0 },

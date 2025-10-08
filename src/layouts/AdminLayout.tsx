@@ -66,8 +66,8 @@ const AdminLayout: React.FC = () => {
       name: '페이지 관리',
       icon: Globe,
       children: [
-        { name: '히어로 섹션', href: '/admin/hero', icon: Sparkles },
-        { name: '바디 섹션', href: '/admin/body', icon: FileText },
+        { name: '전체 섹션 편집 ⭐', href: '/admin/all-sections', icon: Layers },
+        { name: '제품 쇼케이스', href: '/admin/body', icon: FileText },
       ]
     },
     { name: '메뉴 관리', href: '/admin/navigation', icon: Layers },

@@ -1,0 +1,118 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - link "PAPSNET 관리자 대시보드" [ref=e8] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e12]:
+          - text: PAPSNET
+          - generic [ref=e13]: 관리자 대시보드
+      - navigation [ref=e14]:
+        - generic [ref=e15]:
+          - paragraph [ref=e16]: 빠른 실행
+          - button "빠른 명령 ⌘K" [ref=e17] [cursor=pointer]:
+            - generic [ref=e18]:
+              - img [ref=e19]
+              - generic [ref=e21]: 빠른 명령
+            - generic [ref=e22]: ⌘K
+        - generic [ref=e23]:
+          - paragraph [ref=e24]: 메인 메뉴
+          - list [ref=e25]:
+            - listitem [ref=e26]:
+              - link "대시보드" [ref=e27] [cursor=pointer]:
+                - /url: /admin
+                - img [ref=e30]
+                - generic [ref=e35]: 대시보드
+                - img [ref=e36]
+            - listitem [ref=e38]:
+              - button "페이지 관리" [ref=e39] [cursor=pointer]:
+                - img [ref=e41]
+                - generic [ref=e44]: 페이지 관리
+                - img [ref=e45]
+            - listitem [ref=e47]:
+              - link "메뉴 관리" [ref=e48] [cursor=pointer]:
+                - /url: /admin/navigation
+                - img [ref=e50]
+                - generic [ref=e54]: 메뉴 관리
+            - listitem [ref=e55]:
+              - link "설정" [ref=e56] [cursor=pointer]:
+                - /url: /admin/settings
+                - img [ref=e58]
+                - generic [ref=e61]: 설정
+      - generic [ref=e62]:
+        - button "도움말 센터" [ref=e63] [cursor=pointer]:
+          - img [ref=e64]
+          - generic [ref=e67]: 도움말 센터
+        - button "admin@papsnet.com 관리자" [ref=e69] [cursor=pointer]:
+          - generic [ref=e73]:
+            - paragraph [ref=e74]: admin@papsnet.com
+            - paragraph [ref=e75]: 관리자
+          - img [ref=e76]
+  - generic [ref=e78]:
+    - banner [ref=e79]:
+      - generic [ref=e80]:
+        - generic [ref=e83]:
+          - img [ref=e84]
+          - searchbox "검색 (⌘K)" [ref=e87]
+        - generic [ref=e88]:
+          - button [ref=e89] [cursor=pointer]:
+            - img [ref=e90]
+          - button [ref=e96] [cursor=pointer]:
+            - img [ref=e97]
+          - button "새로 만들기" [ref=e103] [cursor=pointer]
+    - main [ref=e104]:
+      - generic [ref=e106]:
+        - generic [ref=e109]:
+          - heading "대시보드" [level=1] [ref=e110]
+          - paragraph [ref=e111]: 실시간 비즈니스 인사이트를 확인하세요
+        - generic [ref=e112]:
+          - generic [ref=e114]:
+            - img [ref=e117]
+            - generic [ref=e119]:
+              - paragraph [ref=e120]: 총 매출
+              - paragraph [ref=e121]: ₩45.2M
+              - generic [ref=e123]:
+                - img [ref=e124]
+                - generic [ref=e127]: +12.5%
+          - generic [ref=e129]:
+            - img [ref=e132]
+            - generic [ref=e137]:
+              - paragraph [ref=e138]: 활성 사용자
+              - paragraph [ref=e139]: 12,543
+              - generic [ref=e141]:
+                - img [ref=e142]
+                - generic [ref=e145]: +8.2%
+          - generic [ref=e147]:
+            - img [ref=e150]
+            - generic [ref=e154]:
+              - paragraph [ref=e155]: 전환율
+              - paragraph [ref=e156]: 3.24%
+              - generic [ref=e158]:
+                - img [ref=e159]
+                - generic [ref=e162]: "-2.4%"
+          - generic [ref=e164]:
+            - img [ref=e167]
+            - generic [ref=e170]:
+              - paragraph [ref=e171]: 페이지 뷰
+              - paragraph [ref=e172]: 892K
+              - generic [ref=e174]:
+                - img [ref=e175]
+                - generic [ref=e178]: +23.1%
+        - generic [ref=e179]:
+          - generic [ref=e181]:
+            - generic [ref=e183]:
+              - heading "매출 분석" [level=2] [ref=e184]
+              - paragraph [ref=e185]: 월간 매출 추이 및 예측
+            - generic [ref=e187]:
+              - img [ref=e188]
+              - paragraph [ref=e190]: 차트 영역
+          - generic [ref=e192]:
+            - heading "시스템 상태" [level=2] [ref=e193]
+            - generic [ref=e195]:
+              - generic [ref=e196]:
+                - generic [ref=e197]: 서버 상태
+                - generic [ref=e198]: 정상
+              - paragraph [ref=e201]: "CPU 사용률: 45%"
+```
