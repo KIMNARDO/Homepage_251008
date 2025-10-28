@@ -210,63 +210,282 @@
         </div>
     </section>
 
-    <!-- Portfolio Section -->
+    <!-- Portfolio Carousel Section -->
     <section id="portfolio" class="portfolio">
         <div class="container">
             <div class="section-header">
                 <span class="section-label">PORTFOLIO</span>
                 <h2 class="section-title">프로젝트 사례</h2>
+                <p class="section-description">우리가 만든 성공적인 프로젝트들을 확인해보세요</p>
             </div>
-            <div class="portfolio-grid">
-                <div class="portfolio-item">
-                    <div class="portfolio-image">
-                        <div class="portfolio-placeholder" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                            <span>E-Commerce</span>
+
+            <div class="carousel-container">
+                <div class="carousel-wrapper" data-carousel="portfolio">
+                    <div class="carousel-track">
+                        <!-- Slide 1 -->
+                        <div class="carousel-slide">
+                            <div class="portfolio-item">
+                                <div class="portfolio-image">
+                                    <div class="portfolio-placeholder" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                        <span>E-Commerce</span>
+                                    </div>
+                                </div>
+                                <div class="portfolio-info">
+                                    <h3>차세대 이커머스 플랫폼</h3>
+                                    <p>AI 기반 추천 시스템을 갖춘 대규모 쇼핑몰 구축. 월 방문자 100만+ 달성</p>
+                                    <div class="portfolio-tags">
+                                        <span>React</span>
+                                        <span>Node.js</span>
+                                        <span>AI</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>차세대 이커머스 플랫폼</h3>
-                        <p>AI 기반 추천 시스템을 갖춘 대규모 쇼핑몰 구축</p>
-                        <div class="portfolio-tags">
-                            <span>React</span>
-                            <span>Node.js</span>
-                            <span>AI</span>
+
+                        <!-- Slide 2 -->
+                        <div class="carousel-slide">
+                            <div class="portfolio-item">
+                                <div class="portfolio-image">
+                                    <div class="portfolio-placeholder" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                        <span>Mobile App</span>
+                                    </div>
+                                </div>
+                                <div class="portfolio-info">
+                                    <h3>헬스케어 모바일 앱</h3>
+                                    <p>개인 맞춤형 건강 관리 솔루션. 앱스토어 4.8점 평점 획득</p>
+                                    <div class="portfolio-tags">
+                                        <span>Flutter</span>
+                                        <span>Firebase</span>
+                                        <span>ML</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 3 -->
+                        <div class="carousel-slide">
+                            <div class="portfolio-item">
+                                <div class="portfolio-image">
+                                    <div class="portfolio-placeholder" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                                        <span>SaaS</span>
+                                    </div>
+                                </div>
+                                <div class="portfolio-info">
+                                    <h3>기업용 협업 플랫폼</h3>
+                                    <p>실시간 협업과 프로젝트 관리 도구. 5000+ 기업 도입</p>
+                                    <div class="portfolio-tags">
+                                        <span>Vue.js</span>
+                                        <span>WebSocket</span>
+                                        <span>AWS</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 4 -->
+                        <div class="carousel-slide">
+                            <div class="portfolio-item">
+                                <div class="portfolio-image">
+                                    <div class="portfolio-placeholder" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                                        <span>FinTech</span>
+                                    </div>
+                                </div>
+                                <div class="portfolio-info">
+                                    <h3>디지털 뱅킹 플랫폼</h3>
+                                    <p>차세대 모바일 뱅킹 서비스. 보안성과 편의성 극대화</p>
+                                    <div class="portfolio-tags">
+                                        <span>React Native</span>
+                                        <span>Blockchain</span>
+                                        <span>Security</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 5 -->
+                        <div class="carousel-slide">
+                            <div class="portfolio-item">
+                                <div class="portfolio-image">
+                                    <div class="portfolio-placeholder" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                                        <span>EdTech</span>
+                                    </div>
+                                </div>
+                                <div class="portfolio-info">
+                                    <h3>온라인 교육 플랫폼</h3>
+                                    <p>인터랙티브 학습 경험 제공. 학생 만족도 95% 달성</p>
+                                    <div class="portfolio-tags">
+                                        <span>Angular</span>
+                                        <span>WebRTC</span>
+                                        <span>Python</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 6 -->
+                        <div class="carousel-slide">
+                            <div class="portfolio-item">
+                                <div class="portfolio-image">
+                                    <div class="portfolio-placeholder" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
+                                        <span>IoT</span>
+                                    </div>
+                                </div>
+                                <div class="portfolio-info">
+                                    <h3>스마트홈 IoT 시스템</h3>
+                                    <p>AI 기반 자동화 홈 관리 솔루션. 에너지 절감 30% 실현</p>
+                                    <div class="portfolio-tags">
+                                        <span>IoT</span>
+                                        <span>TensorFlow</span>
+                                        <span>Cloud</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="portfolio-item">
-                    <div class="portfolio-image">
-                        <div class="portfolio-placeholder" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                            <span>Mobile App</span>
+                <!-- Carousel Controls -->
+                <button class="carousel-btn carousel-btn-prev" data-carousel-control="portfolio" data-direction="prev" aria-label="이전 슬라이드">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                </button>
+                <button class="carousel-btn carousel-btn-next" data-carousel-control="portfolio" data-direction="next" aria-label="다음 슬라이드">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                </button>
+
+                <!-- Carousel Indicators -->
+                <div class="carousel-indicators" data-carousel-indicators="portfolio">
+                    <button class="indicator active" data-slide="0" aria-label="슬라이드 1"></button>
+                    <button class="indicator" data-slide="1" aria-label="슬라이드 2"></button>
+                    <button class="indicator" data-slide="2" aria-label="슬라이드 3"></button>
+                    <button class="indicator" data-slide="3" aria-label="슬라이드 4"></button>
+                    <button class="indicator" data-slide="4" aria-label="슬라이드 5"></button>
+                    <button class="indicator" data-slide="5" aria-label="슬라이드 6"></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Carousel Section -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">TESTIMONIALS</span>
+                <h2 class="section-title">고객의 목소리</h2>
+                <p class="section-description">PAPSNET과 함께한 고객들의 생생한 후기</p>
+            </div>
+
+            <div class="carousel-container testimonials-carousel">
+                <div class="carousel-wrapper" data-carousel="testimonials">
+                    <div class="carousel-track">
+                        <!-- Testimonial 1 -->
+                        <div class="carousel-slide">
+                            <div class="testimonial-card">
+                                <div class="testimonial-quote">"</div>
+                                <p class="testimonial-text">
+                                    PAPSNET 덕분에 우리 비즈니스가 완전히 달라졌습니다.
+                                    전문성과 창의성을 겸비한 팀의 열정이 프로젝트 곳곳에 녹아있었고,
+                                    결과는 기대 이상이었습니다.
+                                </p>
+                                <div class="testimonial-author">
+                                    <div class="author-avatar">👨‍💼</div>
+                                    <div class="author-info">
+                                        <h4>김철수 대표</h4>
+                                        <p>테크스타트업 CEO</p>
+                                    </div>
+                                </div>
+                                <div class="testimonial-rating">
+                                    ⭐⭐⭐⭐⭐
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>헬스케어 모바일 앱</h3>
-                        <p>개인 맞춤형 건강 관리 솔루션</p>
-                        <div class="portfolio-tags">
-                            <span>Flutter</span>
-                            <span>Firebase</span>
-                            <span>ML</span>
+
+                        <!-- Testimonial 2 -->
+                        <div class="carousel-slide">
+                            <div class="testimonial-card">
+                                <div class="testimonial-quote">"</div>
+                                <p class="testimonial-text">
+                                    복잡한 요구사항을 완벽하게 이해하고 구현해주셨습니다.
+                                    프로젝트 기간 동안 소통이 원활했고, 결과물의 퀄리티도 최상급이었습니다.
+                                </p>
+                                <div class="testimonial-author">
+                                    <div class="author-avatar">👩‍💼</div>
+                                    <div class="author-info">
+                                        <h4>이영희 이사</h4>
+                                        <p>글로벌 제조사 IT 담당</p>
+                                    </div>
+                                </div>
+                                <div class="testimonial-rating">
+                                    ⭐⭐⭐⭐⭐
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Testimonial 3 -->
+                        <div class="carousel-slide">
+                            <div class="testimonial-card">
+                                <div class="testimonial-quote">"</div>
+                                <p class="testimonial-text">
+                                    AI 솔루션 도입으로 업무 효율이 40% 향상되었습니다.
+                                    PAPSNET의 기술력과 컨설팅 능력은 업계 최고 수준입니다.
+                                </p>
+                                <div class="testimonial-author">
+                                    <div class="author-avatar">👨‍💻</div>
+                                    <div class="author-info">
+                                        <h4>박민수 부장</h4>
+                                        <p>대형 유통사 디지털본부</p>
+                                    </div>
+                                </div>
+                                <div class="testimonial-rating">
+                                    ⭐⭐⭐⭐⭐
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Testimonial 4 -->
+                        <div class="carousel-slide">
+                            <div class="testimonial-card">
+                                <div class="testimonial-quote">"</div>
+                                <p class="testimonial-text">
+                                    모바일 앱 개발부터 운영까지 전 과정을 케어해주셨습니다.
+                                    사용자 경험을 최우선으로 생각하는 모습이 인상적이었습니다.
+                                </p>
+                                <div class="testimonial-author">
+                                    <div class="author-avatar">👩‍🎨</div>
+                                    <div class="author-info">
+                                        <h4>최수진 팀장</h4>
+                                        <p>헬스케어 스타트업</p>
+                                    </div>
+                                </div>
+                                <div class="testimonial-rating">
+                                    ⭐⭐⭐⭐⭐
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="portfolio-item">
-                    <div class="portfolio-image">
-                        <div class="portfolio-placeholder" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                            <span>SaaS</span>
-                        </div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>기업용 협업 플랫폼</h3>
-                        <p>실시간 협업과 프로젝트 관리 도구</p>
-                        <div class="portfolio-tags">
-                            <span>Vue.js</span>
-                            <span>WebSocket</span>
-                            <span>AWS</span>
-                        </div>
-                    </div>
+                <!-- Carousel Controls -->
+                <button class="carousel-btn carousel-btn-prev" data-carousel-control="testimonials" data-direction="prev" aria-label="이전 후기">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                </button>
+                <button class="carousel-btn carousel-btn-next" data-carousel-control="testimonials" data-direction="next" aria-label="다음 후기">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                </button>
+
+                <!-- Carousel Indicators -->
+                <div class="carousel-indicators" data-carousel-indicators="testimonials">
+                    <button class="indicator active" data-slide="0" aria-label="후기 1"></button>
+                    <button class="indicator" data-slide="1" aria-label="후기 2"></button>
+                    <button class="indicator" data-slide="2" aria-label="후기 3"></button>
+                    <button class="indicator" data-slide="3" aria-label="후기 4"></button>
                 </div>
             </div>
         </div>

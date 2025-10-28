@@ -518,10 +518,12 @@ section {
     background: var(--bg-gray);
 }
 
-.portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: var(--spacing-lg);
+.section-description {
+    color: #666;
+    font-size: 1.125rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.7;
 }
 
 .portfolio-item {
@@ -530,10 +532,12 @@ section {
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     transition: var(--transition-base);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .portfolio-item:hover {
-    transform: translateY(-10px);
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
 }
 
@@ -556,11 +560,14 @@ section {
 }
 
 .portfolio-item:hover .portfolio-placeholder {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .portfolio-info {
     padding: var(--spacing-md);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .portfolio-info h3 {
@@ -573,6 +580,7 @@ section {
     color: #666;
     margin-bottom: var(--spacing-md);
     line-height: 1.6;
+    flex: 1;
 }
 
 .portfolio-tags {
@@ -588,6 +596,196 @@ section {
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--primary);
+}
+
+/* Carousel Styles */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 60px;
+}
+
+.carousel-wrapper {
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.carousel-slide {
+    min-width: 100%;
+    flex-shrink: 0;
+    padding: 0 10px;
+}
+
+/* Carousel Buttons */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bg-light);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: var(--transition-base);
+    z-index: 10;
+    color: var(--text-dark);
+}
+
+.carousel-btn:hover {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 6px 30px rgba(102, 126, 234, 0.3);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-btn:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-btn-prev {
+    left: 0;
+}
+
+.carousel-btn-next {
+    right: 0;
+}
+
+.carousel-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Carousel Indicators */
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: var(--spacing-md);
+}
+
+.carousel-indicators .indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #d0d0d0;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: var(--transition-base);
+}
+
+.carousel-indicators .indicator:hover {
+    background: #a0a0a0;
+    transform: scale(1.2);
+}
+
+.carousel-indicators .indicator.active {
+    background: var(--primary);
+    width: 32px;
+    border-radius: 6px;
+}
+
+/* Testimonials Section */
+.testimonials {
+    background: var(--bg-light);
+    position: relative;
+}
+
+.testimonials::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.02) 0%, rgba(245, 87, 108, 0.02) 100%);
+    pointer-events: none;
+}
+
+.testimonials-carousel {
+    max-width: 800px;
+}
+
+.testimonial-card {
+    background: var(--bg-light);
+    padding: var(--spacing-lg);
+    border-radius: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    position: relative;
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.testimonial-quote {
+    font-size: 6rem;
+    line-height: 1;
+    color: var(--primary);
+    opacity: 0.2;
+    font-family: Georgia, serif;
+    position: absolute;
+    top: 20px;
+    left: 30px;
+}
+
+.testimonial-text {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: var(--spacing-md);
+    position: relative;
+    z-index: 1;
+    font-style: italic;
+    padding-top: 40px;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+}
+
+.author-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--bg-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.author-info h4 {
+    margin-bottom: 0.25rem;
+    color: var(--text-dark);
+    font-size: 1.125rem;
+}
+
+.author-info p {
+    color: #888;
+    font-size: 0.875rem;
+}
+
+.testimonial-rating {
+    font-size: 1.25rem;
+    letter-spacing: 2px;
 }
 
 /* Contact Section */
@@ -805,13 +1003,53 @@ section {
         grid-template-columns: 1fr;
     }
 
-    .services-grid,
-    .portfolio-grid {
+    .services-grid {
         grid-template-columns: 1fr;
     }
 
     .footer-links {
         grid-template-columns: 1fr;
+    }
+
+    /* Carousel Responsive */
+    .carousel-container {
+        padding: 0 50px;
+    }
+
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .carousel-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .testimonial-card {
+        min-height: 300px;
+        padding: var(--spacing-md);
+    }
+
+    .testimonial-quote {
+        font-size: 4rem;
+        top: 10px;
+        left: 20px;
+    }
+
+    .testimonial-text {
+        font-size: 1rem;
+        padding-top: 30px;
+    }
+
+    .author-avatar {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    .section-description {
+        font-size: 1rem;
     }
 }
 
@@ -831,6 +1069,34 @@ section {
 
     .hero-title {
         font-size: 2rem;
+    }
+
+    /* Carousel Mobile */
+    .carousel-container {
+        padding: 0 40px;
+    }
+
+    .carousel-btn {
+        width: 35px;
+        height: 35px;
+    }
+
+    .carousel-indicators .indicator {
+        width: 8px;
+        height: 8px;
+    }
+
+    .carousel-indicators .indicator.active {
+        width: 24px;
+    }
+
+    .testimonial-card {
+        padding: 1.5rem;
+        min-height: 280px;
+    }
+
+    .testimonial-quote {
+        font-size: 3rem;
     }
 }
 

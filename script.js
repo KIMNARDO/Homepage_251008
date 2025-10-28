@@ -312,6 +312,184 @@ function initActiveNavigation() {
 }
 
 /**
+ * Carousel Class
+ * Handles carousel functionality with smooth transitions
+ */
+class Carousel {
+    constructor(carouselId) {
+        this.carouselId = carouselId;
+        this.wrapper = document.querySelector(`[data-carousel="${carouselId}"]`);
+
+        if (!this.wrapper) return;
+
+        this.track = this.wrapper.querySelector('.carousel-track');
+        this.slides = Array.from(this.track.children);
+        this.prevBtn = document.querySelector(`[data-carousel-control="${carouselId}"][data-direction="prev"]`);
+        this.nextBtn = document.querySelector(`[data-carousel-control="${carouselId}"][data-direction="next"]`);
+        this.indicators = document.querySelector(`[data-carousel-indicators="${carouselId}"]`);
+        this.indicatorButtons = this.indicators ? Array.from(this.indicators.children) : [];
+
+        this.currentIndex = 0;
+        this.isTransitioning = false;
+        this.autoplayInterval = null;
+        this.autoplayDelay = 5000; // 5 seconds
+
+        this.init();
+    }
+
+    init() {
+        // Set up event listeners
+        if (this.prevBtn) {
+            this.prevBtn.addEventListener('click', () => this.prev());
+        }
+
+        if (this.nextBtn) {
+            this.nextBtn.addEventListener('click', () => this.next());
+        }
+
+        // Indicator buttons
+        this.indicatorButtons.forEach((button, index) => {
+            button.addEventListener('click', () => this.goToSlide(index));
+        });
+
+        // Touch/swipe support
+        this.initTouchSupport();
+
+        // Keyboard navigation
+        this.initKeyboardSupport();
+
+        // Start autoplay
+        this.startAutoplay();
+
+        // Pause on hover
+        this.wrapper.addEventListener('mouseenter', () => this.stopAutoplay());
+        this.wrapper.addEventListener('mouseleave', () => this.startAutoplay());
+    }
+
+    goToSlide(index) {
+        if (this.isTransitioning) return;
+
+        this.isTransitioning = true;
+        this.currentIndex = index;
+
+        const offset = -index * 100;
+        this.track.style.transform = `translateX(${offset}%)`;
+
+        // Update indicators
+        this.updateIndicators();
+
+        setTimeout(() => {
+            this.isTransitioning = false;
+        }, 500);
+
+        // Reset autoplay
+        this.stopAutoplay();
+        this.startAutoplay();
+    }
+
+    next() {
+        const nextIndex = (this.currentIndex + 1) % this.slides.length;
+        this.goToSlide(nextIndex);
+    }
+
+    prev() {
+        const prevIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
+        this.goToSlide(prevIndex);
+    }
+
+    updateIndicators() {
+        this.indicatorButtons.forEach((button, index) => {
+            if (index === this.currentIndex) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+        });
+    }
+
+    startAutoplay() {
+        this.stopAutoplay();
+        this.autoplayInterval = setInterval(() => {
+            this.next();
+        }, this.autoplayDelay);
+    }
+
+    stopAutoplay() {
+        if (this.autoplayInterval) {
+            clearInterval(this.autoplayInterval);
+            this.autoplayInterval = null;
+        }
+    }
+
+    initTouchSupport() {
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+
+        this.wrapper.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+            this.stopAutoplay();
+        }, { passive: true });
+
+        this.wrapper.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            currentX = e.touches[0].clientX;
+        }, { passive: true });
+
+        this.wrapper.addEventListener('touchend', () => {
+            if (!isDragging) return;
+
+            const diff = startX - currentX;
+
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    this.next();
+                } else {
+                    this.prev();
+                }
+            }
+
+            isDragging = false;
+            this.startAutoplay();
+        });
+    }
+
+    initKeyboardSupport() {
+        document.addEventListener('keydown', (e) => {
+            // Only handle keyboard if carousel is in view
+            const rect = this.wrapper.getBoundingClientRect();
+            const isInView = rect.top < window.innerHeight && rect.bottom > 0;
+
+            if (!isInView) return;
+
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                this.prev();
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                this.next();
+            }
+        });
+    }
+}
+
+/**
+ * Initialize Carousels
+ * Creates carousel instances for all carousels on the page
+ */
+function initCarousels() {
+    const portfolioCarousel = new Carousel('portfolio');
+    const testimonialsCarousel = new Carousel('testimonials');
+
+    // Store carousel instances globally for debugging
+    window.carousels = {
+        portfolio: portfolioCarousel,
+        testimonials: testimonialsCarousel
+    };
+}
+
+/**
  * Initialize All Features
  * Main initialization function
  */
@@ -340,6 +518,7 @@ function initializeAll() {
     initParallaxEffect();
     initNumberCounters();
     initActiveNavigation();
+    initCarousels(); // Initialize carousels
 
     // Add loaded class to body for CSS animations
     document.body.classList.add('loaded');
