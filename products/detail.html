@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제품 상세 - PAPSNET</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/product-detail.css">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <h1><a href="../index.html" style="color: inherit; text-decoration: none;">PAPSNET</a></h1>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="../index.html#home">홈</a></li>
+                    <li><a href="../index.html#products">제품</a></li>
+                    <li><a href="../index.html#about">회사소개</a></li>
+                    <li><a href="../index.html#contact">문의</a></li>
+                    <li><a href="../admin/login.html" class="admin-link">관리자</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 제품 상세 섹션 -->
+    <main class="product-detail-main">
+        <div class="container">
+            <!-- 로딩 상태 -->
+            <div id="loading" class="loading-state">
+                <div class="spinner"></div>
+                <p>제품 정보를 불러오는 중...</p>
+            </div>
+
+            <!-- 제품 상세 내용 -->
+            <div id="productDetail" class="product-detail-container" style="display: none;">
+                <!-- Breadcrumb -->
+                <nav class="breadcrumb">
+                    <a href="../index.html">홈</a>
+                    <span>/</span>
+                    <a href="../index.html#products">제품</a>
+                    <span>/</span>
+                    <span id="breadcrumbProduct">제품명</span>
+                </nav>
+
+                <!-- 제품 헤더 -->
+                <div class="product-header">
+                    <div class="product-header-content">
+                        <span class="product-category-badge" id="categoryBadge">카테고리</span>
+                        <h1 id="productName">제품명</h1>
+                        <p class="product-description" id="productDescription">제품 설명</p>
+                    </div>
+                    <div class="product-header-image">
+                        <div class="image-placeholder">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <polyline points="21 15 16 10 5 21"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 제품 상세 정보 -->
+                <div class="product-info-grid">
+                    <!-- 상세 설명 -->
+                    <section class="info-section">
+                        <h2>상세 설명</h2>
+                        <p id="detailDescription">상세 설명이 여기에 표시됩니다.</p>
+                    </section>
+
+                    <!-- 주요 기능 -->
+                    <section class="info-section">
+                        <h2>주요 기능</h2>
+                        <ul class="features-list" id="featuresList">
+                            <!-- 기능 목록이 동적으로 추가됩니다 -->
+                        </ul>
+                    </section>
+
+                    <!-- 가격 정보 -->
+                    <section class="info-section price-section">
+                        <h2>가격 안내</h2>
+                        <div class="price-box">
+                            <span class="price-label">가격</span>
+                            <span class="price-value" id="productPrice">문의</span>
+                        </div>
+                        <button class="btn btn-primary btn-contact" onclick="scrollToContact()">
+                            문의하기
+                        </button>
+                    </section>
+                </div>
+
+                <!-- 관련 정보 -->
+                <section class="related-info">
+                    <h2>추가 정보</h2>
+                    <div class="info-cards">
+                        <div class="info-card">
+                            <div class="info-card-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                </svg>
+                            </div>
+                            <h3>보안 인증</h3>
+                            <p>국제 보안 표준 인증 획득</p>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-card-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M12 6v6l4 2"/>
+                                </svg>
+                            </div>
+                            <h3>빠른 도입</h3>
+                            <p>최소 2주 내 시스템 구축</p>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-card-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                            </div>
+                            <h3>전문 지원</h3>
+                            <p>24/7 전문가 기술 지원</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 다른 제품 보기 -->
+                <section class="other-products">
+                    <h2>다른 제품 보기</h2>
+                    <div class="products-grid" id="otherProductsGrid">
+                        <!-- 다른 제품들이 동적으로 추가됩니다 -->
+                    </div>
+                </section>
+            </div>
+
+            <!-- 에러 상태 -->
+            <div id="errorState" class="error-state" style="display: none;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <h2>제품을 찾을 수 없습니다</h2>
+                <p>요청하신 제품 정보를 불러올 수 없습니다.</p>
+                <a href="../index.html#products" class="btn btn-primary">제품 목록으로 돌아가기</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>PAPSNET</h4>
+                    <p>혁신적인 IT 솔루션 리더</p>
+                </div>
+                <div class="footer-section">
+                    <h4>빠른 링크</h4>
+                    <ul>
+                        <li><a href="../index.html#home">홈</a></li>
+                        <li><a href="../index.html#products">제품</a></li>
+                        <li><a href="../index.html#about">회사소개</a></li>
+                        <li><a href="../index.html#contact">문의</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>고객지원</h4>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">기술지원</a></li>
+                        <li><a href="#">문서</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 PAPSNET. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/product-detail.js"></script>
+</body>
+</html>

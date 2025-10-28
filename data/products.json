@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "보안 솔루션 PRO",
+    "category": "security",
+    "description": "기업을 위한 종합 보안 솔루션",
+    "detailDescription": "PAPSNET의 보안 솔루션 PRO는 기업의 네트워크와 데이터를 보호하는 통합 보안 시스템입니다. 실시간 위협 탐지, 방화벽, 침입 탐지 시스템(IDS) 등을 포함합니다.",
+    "features": [
+      "실시간 위협 모니터링",
+      "자동 보안 업데이트",
+      "통합 관리 콘솔",
+      "24/7 기술 지원"
+    ],
+    "price": "문의",
+    "image": "images/security-pro.jpg"
+  },
+  {
+    "id": 2,
+    "name": "네트워크 관리 시스템",
+    "category": "network",
+    "description": "효율적인 네트워크 관리 및 모니터링",
+    "detailDescription": "복잡한 기업 네트워크를 간편하게 관리할 수 있는 통합 관리 시스템입니다. 트래픽 분석, 성능 모니터링, 자동화된 구성 관리를 제공합니다.",
+    "features": [
+      "실시간 트래픽 분석",
+      "자동 네트워크 구성",
+      "성능 최적화",
+      "장애 예측 및 알림"
+    ],
+    "price": "문의",
+    "image": "images/network-management.jpg"
+  },
+  {
+    "id": 3,
+    "name": "클라우드 백업 서비스",
+    "category": "cloud",
+    "description": "안전한 데이터 백업 및 복구",
+    "detailDescription": "기업 데이터를 안전하게 보호하는 클라우드 기반 백업 솔루션입니다. 자동 백업, 빠른 복구, 암호화된 저장소를 제공합니다.",
+    "features": [
+      "자동 백업 스케줄링",
+      "암호화된 데이터 전송",
+      "빠른 데이터 복구",
+      "무제한 저장 용량"
+    ],
+    "price": "문의",
+    "image": "images/cloud-backup.jpg"
+  },
+  {
+    "id": 4,
+    "name": "통합 협업 플랫폼",
+    "category": "collaboration",
+    "description": "팀 협업을 위한 올인원 솔루션",
+    "detailDescription": "메신저, 화상회의, 파일 공유, 프로젝트 관리를 하나의 플랫폼에서 제공합니다. 원격 근무 환경에 최적화된 협업 도구입니다.",
+    "features": [
+      "실시간 메시징",
+      "HD 화상회의",
+      "파일 공유 및 협업",
+      "프로젝트 관리 도구"
+    ],
+    "price": "문의",
+    "image": "images/collaboration.jpg"
+  }
+]

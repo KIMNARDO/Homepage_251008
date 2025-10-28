@@ -1,0 +1,367 @@
+/* 제품 상세 페이지 스타일 */
+
+.product-detail-main {
+    margin-top: 70px;
+    min-height: calc(100vh - 70px);
+    padding: 3rem 0;
+}
+
+/* 로딩 & 에러 상태 */
+.loading-state,
+.error-state {
+    text-align: center;
+    padding: 5rem 2rem;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--bg-light);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error-state svg {
+    width: 80px;
+    height: 80px;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+}
+
+.error-state h2 {
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.error-state p {
+    color: var(--text-light);
+    margin-bottom: 2rem;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+}
+
+.breadcrumb a {
+    color: var(--text-light);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.breadcrumb a:hover {
+    color: var(--primary-color);
+}
+
+.breadcrumb span:last-child {
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+/* 제품 헤더 */
+.product-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin-bottom: 4rem;
+    padding: 3rem;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(30, 64, 175, 0.05));
+    border-radius: 16px;
+}
+
+.product-category-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--primary-color);
+    color: var(--white);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.product-header h1 {
+    font-size: 3rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.product-description {
+    font-size: 1.3rem;
+    color: var(--text-light);
+    line-height: 1.8;
+}
+
+.product-header-image {
+    height: 350px;
+}
+
+.product-header-image .image-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-hover);
+}
+
+.product-header-image .image-placeholder svg {
+    width: 120px;
+    height: 120px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* 제품 정보 그리드 */
+.product-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.info-section {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.info-section h2 {
+    font-size: 1.8rem;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+.info-section p {
+    color: var(--text-light);
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+/* 기능 목록 */
+.features-list {
+    list-style: none;
+    padding: 0;
+}
+
+.features-list li {
+    padding: 1rem;
+    margin-bottom: 0.8rem;
+    background: var(--bg-light);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.05rem;
+    color: var(--text-dark);
+    transition: var(--transition);
+}
+
+.features-list li:hover {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(30, 64, 175, 0.1));
+    transform: translateX(5px);
+}
+
+.features-list li::before {
+    content: '✓';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: var(--primary-color);
+    color: var(--white);
+    border-radius: 50%;
+    flex-shrink: 0;
+    font-weight: bold;
+}
+
+/* 가격 섹션 */
+.price-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--white);
+}
+
+.price-section h2 {
+    color: var(--white);
+}
+
+.price-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    margin: 1.5rem 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.price-label {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin-bottom: 0.5rem;
+}
+
+.price-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.btn-contact {
+    width: 100%;
+    background: var(--white);
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    padding: 1.2rem;
+}
+
+.btn-contact:hover {
+    background: var(--bg-light);
+    transform: translateY(-3px);
+}
+
+/* 관련 정보 */
+.related-info {
+    margin-bottom: 4rem;
+}
+
+.related-info h2 {
+    font-size: 2rem;
+    color: var(--text-dark);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.info-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.info-card {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.info-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-hover);
+}
+
+.info-card-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+
+.info-card-icon svg {
+    width: 40px;
+    height: 40px;
+    color: var(--white);
+}
+
+.info-card h3 {
+    font-size: 1.3rem;
+    color: var(--text-dark);
+    margin-bottom: 0.8rem;
+}
+
+.info-card p {
+    color: var(--text-light);
+    font-size: 1rem;
+}
+
+/* 다른 제품 */
+.other-products {
+    margin-bottom: 2rem;
+}
+
+.other-products h2 {
+    font-size: 2rem;
+    color: var(--text-dark);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.other-products .products-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+/* 반응형 디자인 */
+@media (max-width: 968px) {
+    .product-header {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .product-header h1 {
+        font-size: 2.2rem;
+    }
+
+    .product-description {
+        font-size: 1.1rem;
+    }
+
+    .product-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .info-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .product-detail-main {
+        padding: 2rem 0;
+    }
+
+    .product-header {
+        padding: 2rem 1.5rem;
+    }
+
+    .product-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .product-description {
+        font-size: 1rem;
+    }
+
+    .info-section {
+        padding: 1.5rem;
+    }
+
+    .info-section h2 {
+        font-size: 1.5rem;
+    }
+}

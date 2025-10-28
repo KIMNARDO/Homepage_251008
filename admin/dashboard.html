@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 대시보드 - PAPSNET</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+    <!-- 관리자 헤더 -->
+    <header class="admin-header">
+        <div class="admin-nav">
+            <h1>PAPSNET 관리자</h1>
+            <div class="admin-user">
+                <span id="adminUsername">관리자</span>
+                <button onclick="logout()" class="btn btn-logout">로그아웃</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="admin-container">
+        <!-- 사이드바 -->
+        <aside class="admin-sidebar">
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" onclick="showSection('dashboard')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                    대시보드
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('products')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                        <line x1="12" y1="22.08" x2="12" y2="12"/>
+                    </svg>
+                    제품 관리
+                </a>
+                <a href="../index.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                    홈페이지 보기
+                </a>
+            </nav>
+        </aside>
+
+        <!-- 메인 콘텐츠 -->
+        <main class="admin-main">
+            <!-- 대시보드 섹션 -->
+            <section id="dashboardSection" class="admin-section">
+                <h2 class="section-title">대시보드</h2>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3>전체 제품</h3>
+                            <p class="stat-value" id="totalProducts">0</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3>보안 제품</h3>
+                            <p class="stat-value" id="securityProducts">0</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                                <line x1="9" y1="9" x2="9.01" y2="9"/>
+                                <line x1="15" y1="9" x2="15.01" y2="9"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3>네트워크 제품</h3>
+                            <p class="stat-value" id="networkProducts">0</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3>클라우드 제품</h3>
+                            <p class="stat-value" id="cloudProducts">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-activity">
+                    <h3>최근 활동</h3>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 5v14M5 12h14"/>
+                                </svg>
+                            </div>
+                            <div class="activity-content">
+                                <p>관리자 페이지에 접속했습니다</p>
+                                <span class="activity-time" id="loginTime">방금 전</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 제품 관리 섹션 -->
+            <section id="productsSection" class="admin-section" style="display: none;">
+                <div class="section-header">
+                    <h2 class="section-title">제품 관리</h2>
+                    <button onclick="openAddProductModal()" class="btn btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                        제품 추가
+                    </button>
+                </div>
+
+                <div class="products-table-container">
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>제품명</th>
+                                <th>카테고리</th>
+                                <th>설명</th>
+                                <th>가격</th>
+                                <th>작업</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody">
+                            <!-- 제품 목록이 동적으로 추가됩니다 -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 제품 추가/수정 모달 -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">제품 추가</h3>
+                <button onclick="closeProductModal()" class="close-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="productForm" class="modal-form">
+                <input type="hidden" id="productId">
+
+                <div class="form-group">
+                    <label for="productName">제품명 *</label>
+                    <input type="text" id="productNameInput" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="productCategory">카테고리 *</label>
+                    <select id="productCategory" name="category" required>
+                        <option value="security">보안</option>
+                        <option value="network">네트워크</option>
+                        <option value="cloud">클라우드</option>
+                        <option value="collaboration">협업</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="productDesc">간단 설명 *</label>
+                    <input type="text" id="productDesc" name="description" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="productDetailDesc">상세 설명 *</label>
+                    <textarea id="productDetailDesc" name="detailDescription" rows="4" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="productFeatures">주요 기능 (한 줄에 하나씩) *</label>
+                    <textarea id="productFeatures" name="features" rows="5" required placeholder="실시간 모니터링&#10;자동 백업&#10;24/7 지원"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="productPrice">가격</label>
+                    <input type="text" id="productPrice" name="price" value="문의">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" onclick="closeProductModal()" class="btn btn-secondary">취소</button>
+                    <button type="submit" class="btn btn-primary">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/admin.js"></script>
+</body>
+</html>

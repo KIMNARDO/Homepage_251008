@@ -1,0 +1,22 @@
+{
+  "name": "papsnet-homepage",
+  "version": "1.0.0",
+  "description": "PAPSNET 공식 홈페이지 - 제품 소개 및 관리자 시스템",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8000 -c-1",
+    "dev": "npx http-server -p 8000 -c-1 -o",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "homepage",
+    "papsnet",
+    "website",
+    "admin",
+    "products"
+  ],
+  "author": "PAPSNET",
+  "license": "ISC",
+  "devDependencies": {},
+  "dependencies": {}
+}
