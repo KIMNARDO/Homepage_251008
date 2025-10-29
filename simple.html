@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>PAPSNET - 간편 버전</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            margin: 10px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        .section {
+            margin-bottom: 60px;
+        }
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #667eea;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .card h3 {
+            font-size: 1.5rem;
+            margin: 20px 0 10px;
+            color: #333;
+        }
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .status {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .status h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .links {
+            text-align: center;
+            margin: 40px 0;
+        }
+        .links a {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 30px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        .links a:hover {
+            background: #764ba2;
+        }
+        footer {
+            background: #0f0f23;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>🚀 PAPSNET</h1>
+        <p>혁신을 선도하는 기술 기업</p>
+        <a href="#about" class="btn">더 알아보기</a>
+    </div>
+
+    <div class="container">
+        <div class="status">
+            <h3>✅ 서버 정상 작동 중!</h3>
+            <p>이 페이지가 보인다면 서버가 정상적으로 실행되고 있습니다.</p>
+            <p>현재 시간: <span id="time"></span></p>
+        </div>
+
+        <div class="links">
+            <a href="/index.html">🎨 풀 버전 홈페이지 보기</a>
+            <a href="/test.html">🧪 테스트 페이지 보기</a>
+        </div>
+
+        <div class="section" id="about">
+            <h2>회사 소개</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="icon">💡</div>
+                    <h3>혁신</h3>
+                    <p>최첨단 기술로 비즈니스의 미래를 만들어갑니다</p>
+                </div>
+                <div class="card">
+                    <div class="icon">🚀</div>
+                    <h3>성장</h3>
+                    <p>함께 성장하는 파트너</p>
+                </div>
+                <div class="card">
+                    <div class="icon">⚡</div>
+                    <h3>속도</h3>
+                    <p>빠른 실행력</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>주요 서비스</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="icon">🌐</div>
+                    <h3>웹 개발</h3>
+                    <p>최신 기술 스택으로 완벽한 웹 솔루션 제공</p>
+                </div>
+                <div class="card">
+                    <div class="icon">📱</div>
+                    <h3>모바일 앱</h3>
+                    <p>iOS와 Android 네이티브 및 크로스플랫폼 개발</p>
+                </div>
+                <div class="card">
+                    <div class="icon">🤖</div>
+                    <h3>AI 솔루션</h3>
+                    <p>인공지능과 머신러닝으로 비즈니스 최적화</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>연락처</h2>
+            <div class="card">
+                <p><strong>📧 이메일:</strong> contact@papsnet.com</p>
+                <p><strong>📱 전화:</strong> +82 10-1234-5678</p>
+                <p><strong>📍 주소:</strong> 서울특별시 강남구 테헤란로 123</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 PAPSNET. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('time').textContent = new Date().toLocaleString('ko-KR');
+        console.log('✅ PAPSNET 서버 작동 확인!');
+        console.log('풀 버전을 보려면: http://localhost:8000/index.html');
+    </script>
+</body>
+</html>
